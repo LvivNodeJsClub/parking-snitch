@@ -3,14 +3,12 @@ import bodyParser from 'koa-bodyparser';
 import mongoose from 'mongoose';
 import router from './routes';
 
-const HOST = 'localhost';
-const PORT = '16717';
-const DATABASE = 'report-service';
+const {PORT, DB_HOST, DB_PORT, DB_NAME} = process.env;
 
 mongoose
-    .connect(`mongodb://${HOST}:${PORT}/${DATABASE}`, { useNewUrlParser: true })
+    .connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`, { useNewUrlParser: true })
     .then(() => console.log('Database connection successful'))
-    .catch(err => console.error(err));
+    .catch((err: Error) => console.error(err));
 
 const app = new Koa();
 
@@ -19,4 +17,4 @@ app
     .use(router.routes())
     .use(router.allowedMethods());
 
-app.listen(3000, () => console.log('Listening port 3000'));
+app.listen(PORT, () => console.log(`Listening port ${PORT}`));

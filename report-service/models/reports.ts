@@ -11,7 +11,7 @@ export enum Statuses {
 
 const reportSchema = new Schema({
     userId: String,
-    body:   String,
+    body: String,
     location: {
        lat: Number,
        lon: Number,
