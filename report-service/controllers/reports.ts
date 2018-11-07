@@ -1,24 +1,24 @@
 import {Context} from "koa";
+import {NotFoundError, ForbiddenError} from '../errorHandler/customErrors';
 import ReportModel, {Statuses} from "../models/reports";
 import {validateUpdateReport, validateCreateNewReport} from "../validators/reports";
 
 
 export const getReportById = async (ctx: Context) => {
-    ctx.body = await ReportModel.findById(ctx.params.id);
+    const report = await ReportModel.findById(ctx.params.id);
+    if (!report) {
+        throw new NotFoundError(`Report with ID ${ctx.params.id} was not found`);
+    }
+    ctx.body = report;
 };
 
-export const createNewReport = async (ctx: Context, next: Function) => {
+export const createNewReport = async (ctx: Context) => {
     if (!ctx.request.body) {
-        ctx.response.status = 403;
-        return next();
+        throw new ForbiddenError();
     }
 
     const query = {
         userId: '1',
-        location: {
-            lat: 0,
-            lon: 0,
-        },
         ...validateCreateNewReport(ctx.request.body),
     };
     const report = new ReportModel(query);
@@ -27,10 +27,9 @@ export const createNewReport = async (ctx: Context, next: Function) => {
     ctx.body = report;
 };
 
-export const updateReport = async (ctx: Context, next: Function) => {
+export const updateReport = async (ctx: Context) => {
     if (!ctx.request.body) {
-        ctx.response.status = 403;
-        return next();
+        throw new ForbiddenError();
     }
 
     const query = validateUpdateReport(ctx.request.body);
