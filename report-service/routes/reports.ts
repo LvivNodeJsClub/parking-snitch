@@ -6,8 +6,8 @@ const router = new Router();
 
 router
     .get('/:id', getReportById)
-    .put('/:id', updateReport)
+    .patch('/:id', updateReport)
     .delete('/:id', deleteReport)
-    .post('/', createNewReport)
+    .post('/', createNewReport);
 
 export default router;

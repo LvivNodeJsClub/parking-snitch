@@ -1,5 +1,6 @@
 import {Context} from "koa";
-import {NotFoundError, ForbiddenError} from '../errorHandler/customErrors';
+import HttpStatus from 'http-status-codes';
+import {NotFoundError, BadRequestError} from '../errorHandler/customErrors';
 import ReportModel, {Statuses} from "../models/reports";
 import {validateUpdateReport, validateCreateNewReport} from "../validators/reports";
 
@@ -14,7 +15,7 @@ export const getReportById = async (ctx: Context) => {
 
 export const createNewReport = async (ctx: Context) => {
     if (!ctx.request.body) {
-        throw new ForbiddenError();
+        throw new BadRequestError();
     }
 
     const query = {
@@ -29,7 +30,7 @@ export const createNewReport = async (ctx: Context) => {
 
 export const updateReport = async (ctx: Context) => {
     if (!ctx.request.body) {
-        throw new ForbiddenError();
+        throw new BadRequestError();
     }
 
     const query = validateUpdateReport(ctx.request.body);
@@ -38,5 +39,5 @@ export const updateReport = async (ctx: Context) => {
 
 export const deleteReport = async (ctx: Context) => {
     await ReportModel.findOneAndUpdate({'_id': ctx.params.id}, {status: Statuses.CANCELED});
-    ctx.response.status = 200;
+    ctx.response.status = HttpStatus.NO_CONTENT;
 };
