@@ -5,7 +5,7 @@
   "repository": {},
   "main": "index.js",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node $NODE_DEBUG_OPTION dist/server.js",
     "build:ts": "npx tsc",
     "build": "npm run build:ts",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -21,12 +21,14 @@
     "dotenv": "^6.1.0",
     "mongoose": "^5.3.11",
     "restify": "^7.2.2",
+    "restify-errors": "^6.1.1",
     "winston": "^3.1.0"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.0",
     "@types/mongoose": "^5.3.1",
     "@types/restify": "^7.2.6",
+    "@types/restify-errors": "^4.3.3",
     "@types/winston": "^2.4.4",
     "tslint": "^5.11.0",
     "typescript": "^3.1.6"

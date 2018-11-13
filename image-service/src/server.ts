@@ -1,25 +1,42 @@
 // import config from "./env";
-// import fs from "fs";
+import fs from "fs";
 
 import dotenv from "dotenv";
 
 import restify from "restify";
 
+import errs from "restify-errors";
+
 import logger from "./logger";
+
+import Storage from "./storage";
+
+import FileAdapter from "./flieAdapter";
 
 const config = dotenv.config();
 if (config.error) {
     throw config.error;
 }
 
-const server = restify.createServer({ name: "image-server" });
-server.use(restify.plugins.bodyParser());
+const filePath = __dirname + process.env.FILE_PATH;
+const fileAdapter = new FileAdapter(filePath)
+const storage = new Storage(fileAdapter);
 
-server.post("/images/upload", async (request, response) => {
+const server = restify.createServer({ name: "image-server" });
+server.use(restify.plugins.bodyParser({
+    keepExtensions: true,
+    multiples: true,
+    uploadDir: "/Users/yzhunkivskyi/uploads",
+}));
+
+server.post("/images/upload", async (request, response, next) => {
     if (request.files) {
-        for (let key in request.files) {
+        for (const key in request.files) {
             if (request.files.hasOwnProperty(key)) {
-                logger.debug(request.files.key.path);
+                if (!request.files[key].type.startsWith("image/")) {
+                    return next(new errs.InternalServerError("boom!"));
+                }
+                const file = storage.put(request.files[key].path);
             }
         }
     }
