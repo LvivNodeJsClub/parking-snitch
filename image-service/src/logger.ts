@@ -5,6 +5,7 @@ const logger = createLogger({
         format.splat(),
         format.simple(),
       ),
+    level: "info",
     transports: [new transports.Console()],
 });
 

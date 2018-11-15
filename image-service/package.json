@@ -5,8 +5,9 @@
   "repository": {},
   "main": "index.js",
   "scripts": {
-    "start": "node $NODE_DEBUG_OPTION dist/server.js",
+    "start": "node -r dotenv/config $NODE_DEBUG_OPTION dist/server.js",
     "build:ts": "npx tsc",
+    "watch:ts": "npx tsc -w",
     "build": "npm run build:ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx tslint -c tslint.json 'src/**/*.ts'"
