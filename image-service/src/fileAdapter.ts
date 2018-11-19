@@ -1,4 +1,5 @@
 import fs from "fs";
+import {resolve} from "path";
 import {promisify} from "util";
 import logger from "./logger";
 import {IStorageAdapter} from "./storage";
@@ -21,6 +22,6 @@ export default class FileAdapter implements IStorageAdapter {
     }
 
     private getNewPath(fileName: string): string {
-        return `${this.source}/${fileName}`;
+        return resolve(this.source, fileName);
     }
 }
