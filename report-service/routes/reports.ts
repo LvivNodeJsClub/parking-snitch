@@ -1,12 +1,12 @@
 import Router from 'koa-router';
 
-import { getReportById, updateReport, deleteReport, createNewReport } from '../controllers/reports'
+import { getReportById, modifyReport, deleteReport, createNewReport } from '../controllers/reports'
 
 const router = new Router();
 
 router
     .get('/:id', getReportById)
-    .patch('/:id', updateReport)
+    .patch('/:id', modifyReport)
     .delete('/:id', deleteReport)
     .post('/', createNewReport);
 

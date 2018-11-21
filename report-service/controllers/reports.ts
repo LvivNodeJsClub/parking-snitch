@@ -28,7 +28,7 @@ export const createNewReport = async (ctx: Context) => {
     ctx.body = report;
 };
 
-export const updateReport = async (ctx: Context) => {
+export const modifyReport = async (ctx: Context) => {
     if (!ctx.request.body) {
         throw new BadRequestError();
     }
