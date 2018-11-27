@@ -1,9 +1,13 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules": {},
-    "rules": {},
-    "rulesDirectory": []
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "jsRules": {},
+  "rules": {
+    "named-imports-order": "any",
+    "import-sources-order": "any",
+    "object-literal-sort-keys": false
+  },
+  "rulesDirectory": []
 }
