@@ -1,8 +1,10 @@
 import restify from "restify";
-import errs from "restify-errors";
-import {storage} from "./app";
+import {InvalidArgumentError} from "restify-errors";
+import App from "./app";
+import config from "./config";
 import logger from "./logger";
 
+const app = new App(config.defaultStorageType);
 const server = restify.createServer({ name: "image-server" });
 
 server.use(restify.plugins.bodyParser({
@@ -12,27 +14,29 @@ server.use(restify.plugins.bodyParser({
 
 server.post("/images/upload", async (request, response, next) => {
     if (!request.files) {
-        return next(new errs.InvalidArgumentError("No files in request"));
+        return next(new InvalidArgumentError("No files in request"));
     }
+    const results = [];
     try {
         for (const key in request.files) {
             if (request.files[key] instanceof Array) {
                 // @ts-ignore
                 for (const file of request.files[key]) {
-                    const newPath = await storage.put(file);
+                    results.push(await app.upload(file));
                 }
             } else if (request.files[key] instanceof Object) {
                 // @ts-ignore
-                const newPath = await storage.put(request.files[key]);
+                results.push(await app.upload(request.files[key]));
             } else {
-                throw new Error("Invalid files in request");
+                throw new InvalidArgumentError("Invalid files in request");
             }
         }
     } catch (e) {
         next(e);
     }
 
-    response.send(200);
+    const res = await Promise.all(results);
+    response.send(200, res);
     next();
 });
 
