@@ -3,6 +3,7 @@ import {InvalidArgumentError} from "restify-errors";
 import App from "./app";
 import config from "./config";
 import logger from "./logger";
+import IMessageToUploadImages from "./queueProducer/IMessageToUploadImages";
 
 const app = new App(config.defaultStorageType);
 const server = restify.createServer({ name: "image-server" });
@@ -32,11 +33,23 @@ server.post("/images/upload", async (request, response, next) => {
             }
         }
     } catch (e) {
-        next(e);
+        return next(e);
     }
 
-    const res = await Promise.all(results);
-    response.send(200, res);
+    const resultImages = await Promise.all(results);
+
+    try {
+        const messageToUploadImages = {
+            imageIds: resultImages.map(({image}) => image._id),
+        } as IMessageToUploadImages;
+
+        await app.notify(messageToUploadImages);
+    } catch (error) {
+        logger.error(error);
+        return next(error);
+    }
+
+    response.send(200, resultImages);
     next();
 });
 
