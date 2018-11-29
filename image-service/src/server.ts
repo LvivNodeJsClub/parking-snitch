@@ -40,7 +40,8 @@ server.post("/images/upload", async (request, response, next) => {
 
     try {
         const messageToUploadImages = {
-            imageIds: resultImages.map(({image}) => image._id),
+            //TODO: Add reportId here
+            imageIds: resultImages.map(({image}) => image._id.toString()),
         } as IMessageToUploadImages;
 
         await app.notify(messageToUploadImages);

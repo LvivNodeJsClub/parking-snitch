@@ -12,12 +12,11 @@ export default class App {
     private readonly storage: StorageService | undefined;
     private db: Connection;
     private rabbitmqProducer: IQueueProducer | undefined;
-    private readonly queueName = "images_queue";
     constructor(storageType: StorageTypes) {
         this.storage = StorageManager.getStorage(storageType);
         mongoose.connect(config.db.connection, {
             useNewUrlParser: true,
-            // auth: {authdb: "admin"},
+            auth: {authdb: "admin"},
         });
         this.db = mongoose.connection;
         this.db.on("error", logger.error.bind("Connection error"));
@@ -57,7 +56,7 @@ export default class App {
             throw new Error("rabbitmqProducer is not initialised");
         }
 
-        return this.rabbitmqProducer.sendMessageToQueue(this.queueName, message);
+        return this.rabbitmqProducer.sendMessageToQueue(config.queue.imagesQueueName, message);
     }
 
 }

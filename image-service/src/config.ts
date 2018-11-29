@@ -14,11 +14,12 @@ const config = {
     },
     queue: {
         host: process.env.QUEUE_HOST || "localhost",
-        port: process.env.PORT || 5672,
+        port: process.env.QUEUE_PORT || 5672,
+        imagesQueueName: process.env.IMAGES_QUEUE_NAME || "images_queue",
         connection: "",
     }
 };
 
-config.db.connection = `mongodb://${config.db.host}:${config.db.port}/${config.db.name}`;
+config.db.connection = `mongodb://${config.db.user}:${config.db.password}@${config.db.host}:${config.db.port}/${config.db.name}`;
 config.queue.connection = `amqp://${config.queue.host}:${config.queue.port}`;
 export default config;
