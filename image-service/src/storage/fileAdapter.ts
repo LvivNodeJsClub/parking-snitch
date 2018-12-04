@@ -1,11 +1,12 @@
 import fs from "fs";
 import {resolve, sep as DS} from "path";
+import mkdirp from "mkdirp";
 import {promisify} from "util";
 import logger from "../logger";
 import {ISavedFile, IStorageAdapter} from "./storage";
 
 const rename = promisify(fs.rename);
-const mkdir = promisify(fs.mkdir);
+const mkdir = promisify(mkdirp);
 
 export default class FileAdapter implements IStorageAdapter {
     constructor(private basePath: string) {
