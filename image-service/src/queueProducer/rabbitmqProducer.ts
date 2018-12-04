@@ -1,19 +1,30 @@
-import { Connection, connect } from "amqplib";
+import {Connection, Channel, connect} from "amqplib";
 import IQueueProducer from "./IQueueProducer";
-import IMessageToUploadImages from "./IMessageToUploadImages";
+import IMessageToUploadPhotos from "./IMessageToUploadPhotos";
 
 export default class RabbitmqProducer implements IQueueProducer {
-    constructor(private connection: Connection) {}
+    private connection: Connection | any;
+    private channel: Channel | any;
+    private initialized: boolean = false;
 
-    async sendMessageToQueue(queue: string, message: IMessageToUploadImages): Promise<boolean> {
-        const channel = await this.connection.createChannel();
+    constructor(private url: string) {}
 
-        await channel.assertQueue(queue, {durable: true});
+    async init() {
+        if (this.initialized) {
+            throw new Error("The RabbitmqProducer instance already initialised");
+        }
 
-        return channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)), {persistent: true});
+        this.connection = await connect(this.url);
+        this.channel = await this.connection.createChannel();
+        this.initialized = true;
     }
 
-    static async getConnection(url: string): Promise<Connection> {
-        return connect(url);
+    async sendMessageToQueue(queue: string, message: IMessageToUploadPhotos): Promise<boolean> {
+        if (!this.initialized) {
+            throw new Error("The RabbitmqProducer instance is not initialised yet");
+        }
+
+        await this.channel.assertQueue(queue, {durable: true});
+        return this.channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)), {persistent: true});
     }
 }

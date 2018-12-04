@@ -1,24 +1,36 @@
-import {Connection, connect, ConsumeMessage, Message} from "amqplib";
+import {Connection, ConsumeMessage, Message, Channel, connect} from "amqplib";
 import IQueueConsumer from "./IQueueConsumer";
-import IMessageToUploadImages from "./IMessageToUploadImages";
+import IMessageToUploadPhotos from "./IMessageToUploadPhotos";
 
 export default class RabbitmqConsumer implements IQueueConsumer {
-    constructor(private connection: Connection) {}
+    private connection: Connection | any;
+    private channel: Channel | any;
+    private initialized: boolean = false;
 
-    async consumeMessagesFromQueue(queue: string, onMessage: (msg: IMessageToUploadImages) => Promise<void>): Promise<void> {
-        const channel = await this.connection.createChannel();
+    constructor(private url: string) {}
 
-        await channel.assertQueue(queue, {durable: true});
-        await channel.prefetch(1);
-        await channel.consume(queue, async (message: ConsumeMessage | null) => {
-            const messageToUploadImages = message && JSON.parse(message.content.toString());
+    async init() {
+        if (this.initialized) {
+            throw new Error("The RabbitmqConsumer instance already initialised");
+        }
 
-            await onMessage(messageToUploadImages as any as IMessageToUploadImages);
-            channel.ack(message as Message);
-        }, {noAck: false});
+        this.connection = await connect(this.url);
+        this.channel = await this.connection.createChannel();
+        this.initialized = true;
     }
 
-    static async getConnection(url: string): Promise<Connection> {
-        return connect(url);
+    async consumeMessagesFromQueue(queue: string, onMessage: (msg: IMessageToUploadPhotos) => Promise<void>): Promise<void> {
+        if (!this.initialized) {
+            throw new Error("The RabbitmqConsumer instance is not initialised yet");
+        }
+
+        await this.channel.assertQueue(queue, {durable: true});
+        await this.channel.prefetch(1);
+        await this.channel.consume(queue, async (message: ConsumeMessage | null) => {
+            const messageToUploadPhotos = message && JSON.parse(message.content.toString());
+
+            await onMessage(messageToUploadPhotos as any as IMessageToUploadPhotos);
+            this.channel.ack(message as Message);
+        }, {noAck: false});
     }
 };

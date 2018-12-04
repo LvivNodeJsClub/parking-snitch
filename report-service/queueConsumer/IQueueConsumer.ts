@@ -1,5 +1,6 @@
-import IMessageToUploadImages from "./IMessageToUploadImages";
+import IMessageToUploadPhotos from "./IMessageToUploadPhotos";
 
 export default interface IQueueConsumer {
-    consumeMessagesFromQueue(queue: string, onMessage: (msg: IMessageToUploadImages) => Promise<void>): Promise<void>;
+    init(): Promise<void>;
+    consumeMessagesFromQueue(queue: string, onMessage: (msg: IMessageToUploadPhotos) => Promise<void>): Promise<void>;
 }

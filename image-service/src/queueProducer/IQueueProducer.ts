@@ -1,5 +1,6 @@
-import IMessageToUploadImages from "./IMessageToUploadImages";
+import IMessageToUploadPhotos from "./IMessageToUploadPhotos";
 
 export default interface IQueueProducer {
-    sendMessageToQueue(queue: string, message: IMessageToUploadImages): Promise<boolean>;
+    init(): Promise<void>;
+    sendMessageToQueue(queue: string, message: IMessageToUploadPhotos): Promise<boolean>;
 }
