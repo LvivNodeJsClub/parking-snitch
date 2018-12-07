@@ -3,8 +3,8 @@ import IQueueProducer from "./IQueueProducer";
 import IMessageToUploadPhotos from "./IMessageToUploadPhotos";
 
 export default class RabbitmqProducer implements IQueueProducer {
-    private connection: Connection | any;
-    private channel: Channel | any;
+    private connection: Connection | undefined;
+    private channel: Channel | undefined;
     private initialized: boolean = false;
 
     constructor(private url: string) {}
@@ -20,7 +20,7 @@ export default class RabbitmqProducer implements IQueueProducer {
     }
 
     async sendMessageToQueue(queue: string, message: IMessageToUploadPhotos): Promise<boolean> {
-        if (!this.initialized) {
+        if (!this.channel) {
             throw new Error("The RabbitmqProducer instance is not initialised yet");
         }
 

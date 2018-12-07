@@ -3,8 +3,8 @@ import IQueueConsumer from "./IQueueConsumer";
 import IMessageToUploadPhotos from "./IMessageToUploadPhotos";
 
 export default class RabbitmqConsumer implements IQueueConsumer {
-    private connection: Connection | any;
-    private channel: Channel | any;
+    private connection: Connection | undefined;
+    private channel: Channel | undefined;
     private initialized: boolean = false;
 
     constructor(private url: string) {}
@@ -19,18 +19,18 @@ export default class RabbitmqConsumer implements IQueueConsumer {
         this.initialized = true;
     }
 
-    async consumeMessagesFromQueue(queue: string, onMessage: (msg: IMessageToUploadPhotos) => Promise<void>): Promise<void> {
-        if (!this.initialized) {
+    async consumeMessagesFromQueue(queue: string, onMessage: (msg: IMessageToUploadPhotos | null) => Promise<void>): Promise<void> {
+        if (!this.channel) {
             throw new Error("The RabbitmqConsumer instance is not initialised yet");
         }
 
         await this.channel.assertQueue(queue, {durable: true});
         await this.channel.prefetch(1);
         await this.channel.consume(queue, async (message: ConsumeMessage | null) => {
-            const messageToUploadPhotos = message && JSON.parse(message.content.toString());
+            const messageToUploadPhotos = message && JSON.parse(message.content.toString()) as IMessageToUploadPhotos;
 
-            await onMessage(messageToUploadPhotos as any as IMessageToUploadPhotos);
-            this.channel.ack(message as Message);
+            await onMessage(messageToUploadPhotos as IMessageToUploadPhotos);
+            this.channel && this.channel.ack(message as Message);
         }, {noAck: false});
     }
 };
