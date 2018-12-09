@@ -30,6 +30,12 @@ export async function updateInspector(req: Request, res: Response) {
     res.send(await InspectorsModel.findOneAndUpdate({'_id': req.params.id}, inspectorData, {new: true}));
 }
 
+export async function replaceInspector(req: Request, res: Response) {
+    const inspectorData = req.body;
+    // TODO: validation should be here
+    res.send(await InspectorsModel.replaceOne({'_id': req.params.id}, inspectorData));
+}
+
 export async function deleteInspector(req: Request, res: Response) {
     await InspectorsModel.findOneAndUpdate({'_id': req.params.id}, {deleted: true});
     res.sendStatus(statusCodes.NO_CONTENT);
