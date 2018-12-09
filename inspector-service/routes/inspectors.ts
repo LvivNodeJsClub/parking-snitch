@@ -1,5 +1,11 @@
 import {Router} from 'express';
-import {getInspectorById, getAllInspectors, addNewInspector, updateInspector, deleteInspector} from '../controllers/inspectors';
+import {
+    getInspectorById,
+    getAllInspectors,
+    addNewInspector,
+    updateInspector,
+    deleteInspector
+} from '../controllers/inspectors';
 import asyncMiddleware from "../utils/asyncMiddleware";
 
 const router = Router();
