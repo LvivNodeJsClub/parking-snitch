@@ -9,7 +9,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: "${DB_USER}"
       MONGO_INITDB_ROOT_PASSWORD: "${DB_PASSWORD}"
   web:
-    image: snitch:image-service
+    image: snitch:photo-service
     build:
       context: ./
       dockerfile: Dockerfile

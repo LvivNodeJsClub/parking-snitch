@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import router from './routes';
 import errorHandler from './errorHandler';
 import RabbitmqConsumer from "./queueConsumer/rabbitmqConsumer";
-import {imagesMessageHandler} from "./handlers";
+import {photosMessageHandler} from "./handlers";
 
 const {PORT, DB_HOST, DB_PORT, DB_NAME, QUEUE_HOST, QUEUE_PORT, IMAGES_QUEUE_NAME} = process.env;
 
@@ -25,11 +25,11 @@ async function init() {
         await mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`, { useNewUrlParser: true });
         console.log('Database connection successful');
 
-        const rabbitmqConnection = await RabbitmqConsumer.getConnection(`amqp://${QUEUE_HOST}:${QUEUE_PORT}`);
-        const rabbitmqConsumer = new RabbitmqConsumer(rabbitmqConnection);
+        const rabbitmqConsumer = new RabbitmqConsumer(`amqp://${QUEUE_HOST}:${QUEUE_PORT}`);
+        await rabbitmqConsumer.init();
         console.log('Rabbitmq connection successful');
 
-        await rabbitmqConsumer.consumeMessagesFromQueue(IMAGES_QUEUE_NAME || "", imagesMessageHandler);
+        await rabbitmqConsumer.consumeMessagesFromQueue(IMAGES_QUEUE_NAME || "", photosMessageHandler);
     } catch (error) {
         console.error(error);
         process.exit(1);

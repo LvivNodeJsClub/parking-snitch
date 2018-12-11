@@ -1,7 +1,7 @@
 {
-  "name": "image-service",
+  "name": "photo-service",
   "version": "1.0.0",
-  "description": "Image service",
+  "description": "Photo service",
   "repository": {},
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "lint": "npx tslint -c tslint.json 'src/**/*.ts'"
   },
   "keywords": [
-    "image",
+    "photo",
     "upload"
   ],
   "author": "Yura Zhunkivskyi <zhunik@gmail.com>",

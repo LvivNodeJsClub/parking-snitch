@@ -1,7 +1,7 @@
 import {model, Schema} from "mongoose";
 import {StorageTypes} from "../storage/storageManager";
 
-const ImageSchema = new Schema({
+const PhotoSchema = new Schema({
     name: String,
     path: String,
     storage: {
@@ -10,8 +10,9 @@ const ImageSchema = new Schema({
         type: String,
     },
     type: String,
+    reportId: String,
 }, {timestamps: true});
 
-const ImageModel = model("Image", ImageSchema);
+const PhotoModel = model("Photo", PhotoSchema);
 
-export default ImageModel;
+export default PhotoModel;

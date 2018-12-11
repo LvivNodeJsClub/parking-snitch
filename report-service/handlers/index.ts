@@ -1,6 +1,8 @@
-import IMessageToUploadImages from "../queueConsumer/IMessageToUploadImages";
+import IMessageToUploadPhotos from "../queueConsumer/IMessageToUploadPhotos";
+import ReportModel from "../models/reports";
 
-export const imagesMessageHandler = async (message: IMessageToUploadImages): Promise<void> => {
-    console.log(message);
-    //TODO: add images to report
+export const photosMessageHandler = async (message: IMessageToUploadPhotos | null): Promise<void> => {
+    if (message) {
+        await ReportModel.findOneAndUpdate({'_id': message.reportId}, {$push: {photoIds: message.photoIds}}, {new: true});
+    }
 };
