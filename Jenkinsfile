@@ -38,7 +38,7 @@ pipeline {
             steps {
                 script {
                     dir ('report-service') {
-                        sh 'npm install'
+                        sh 'npm ci'
                         sh 'npm build'
                     }
                 }
@@ -109,7 +109,7 @@ pipeline {
             steps {
                 script {
                     dir ('image-service') {
-                        sh 'npm install'
+                        sh 'npm ci'
                         sh 'npm build'
                     }
                 }
@@ -152,6 +152,77 @@ pipeline {
             steps {
                 script {
                     dir ('image-service') {
+                        sh 'docker push'
+                    }
+                }
+            }
+        }
+
+        /*
+         * Build `inspector-service`
+         */
+        stage('Init environment variables for inspector-service') {
+            when {
+                expression {
+                    return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^inspector-service'")
+                }
+            }
+            steps {
+                echo 'Init environment variables for inspector-service'
+            }
+        }
+        stage('Install and building inspector-service') {
+            when {
+                expression {
+                    return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^inspector-service'")
+                }
+            }
+            steps {
+                script {
+                    dir ('inspector-service') {
+                        sh 'npm ci'
+                        sh 'npm build'
+                    }
+                }
+            }
+        }
+        stage('Testing inspector-service') {
+            when {
+                expression {
+                    return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^inspector-service'")
+                }
+            }
+            steps {
+                script {
+                    dir ('inspector-service') {
+                        sh 'npm test'
+                    }
+                }
+            }
+        }
+        stage('Build docker image for inspector-service') {
+            when {
+                expression {
+                    return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^inspector-service'")
+                }
+            }
+            steps {
+                script {
+                    dir ('inspector-service') {
+                        sh 'docker build .'
+                    }
+                }
+            }
+        }
+        stage('Publish artifacts for inspector-service') {
+            when {
+                expression {
+                    return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^inspector-service'")
+                }
+            }
+            steps {
+                script {
+                    dir ('inspector-service') {
                         sh 'docker push'
                     }
                 }
