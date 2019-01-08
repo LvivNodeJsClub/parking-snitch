@@ -1,6 +1,18 @@
-import mongoose from "mongoose";
+import mongoose, {Document, Model} from "mongoose";
 
 const {Schema} = mongoose;
+
+interface Location {
+    lat: number
+    lon: number
+}
+
+export interface InspectorModel extends Document {
+    location: Location
+    _id: string
+    name: string
+    email: string
+}
 
 const inspectorSchema = new Schema({
     name: Schema.Types.String,
@@ -22,4 +34,4 @@ const inspectorSchema = new Schema({
     timestamps: true
 });
 
-export default mongoose.model('Inspector', inspectorSchema);
+export const Inspector: Model<InspectorModel> = mongoose.model<InspectorModel>('Inspector', inspectorSchema);

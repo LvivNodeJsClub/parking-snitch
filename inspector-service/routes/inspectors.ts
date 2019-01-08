@@ -5,11 +5,15 @@ import {
     addNewInspector,
     updateInspector,
     replaceInspector,
-    deleteInspector
+    deleteInspector,
+    getNearest
 } from '../controllers/inspectors';
 import asyncMiddleware from "../utils/asyncMiddleware";
 
 const router = Router();
+
+router.route('/nearest')
+    .get(asyncMiddleware(getNearest));
 
 router.route('/:id')
     .get(asyncMiddleware(getInspectorById))
