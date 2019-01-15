@@ -1,0 +1,53 @@
+version: "3"
+
+services:
+ 
+  inspector-db-host:
+    image: mongo:latest
+    ports:
+      - "27017"
+
+  inspector-service-host:
+    image: inspector-service
+    build:
+      context: ./inspector-service
+      dockerfile: Dockerfile
+    links:
+      - inspector-db-host
+    ports:
+      - "3003:3000"
+    environment:
+      DB_HOST: inspector-db-host
+
+  photo-queue-host:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+      # RABBITMQ_DEFAULT_USER: rabbitmq
+      # RABBITMQ_DEFAULT_PASS: rabbitmq
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  photo-db-host:
+    image: mongo:latest
+    ports:
+      - "27017"
+
+  photo-service-host:
+    image: photo-service
+    restart: on-failure
+    build:
+      context: ./photo-service
+      dockerfile: Dockerfile
+    links:
+      - photo-db-host
+      - photo-queue-host
+    ports:
+      - "3002:3000"
+    environment:
+      DB_HOST: photo-db-host
+      DB_USER:
+      DB_PASSWORD:
+      QUEUE_HOST: photo-queue-host
