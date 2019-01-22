@@ -6,6 +6,8 @@ services:
     image: mongo:latest
     ports:
       - "27017"
+    networks:
+      - inspector-service-network
 
   inspector-service-host:
     image: inspector-service
@@ -16,6 +18,8 @@ services:
       - inspector-db-host
     ports:
       - "3003:3000"
+    networks:
+      - inspector-service-network
     environment:
       DB_HOST: inspector-db-host
 
@@ -29,11 +33,20 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+    networks:
+      - photo-service-network
+      - report-service-network
 
   photo-db-host:
     image: mongo:latest
     ports:
       - "27017"
+    networks:
+      - photo-service-network
+    environment:
+      MONGO_INITDB_DATABASE: photo-service-db
+      MONGO_INITDB_ROOT_USERNAME: photo-service-user
+      MONGO_INITDB_ROOT_PASSWORD: photo-service-pass
 
   photo-service-host:
     image: photo-service
@@ -46,8 +59,50 @@ services:
       - photo-queue-host
     ports:
       - "3002:3000"
+    volumes:
+      - photo-storage:/usr/app/storage
+    networks:
+      - photo-service-network
     environment:
       DB_HOST: photo-db-host
-      DB_USER:
-      DB_PASSWORD:
+      DB_NAME: photo-db-db
+      DB_USER: photo-service-user
+      DB_PASSWORD: photo-service-pass
       QUEUE_HOST: photo-queue-host
+      FILE_PATH: storage
+
+  report-db-host:
+    image: mongo:latest
+    ports:
+      - "27017"
+    networks:
+      - report-service-network
+
+  report-service-host:
+    image: report-service
+    restart: on-failure
+    build:
+      context: ./report-service
+      dockerfile: Dockerfile
+    links:
+      - report-db-host
+      - photo-queue-host
+    ports:
+      - "3001:3000"
+    networks:
+      - report-service-network
+    environment:
+      DB_HOST: report-db-host
+      QUEUE_HOST: photo-queue-host
+      QUEUE_PORT: 5672
+
+volumes:
+  photo-storage:
+
+networks:
+  inspector-service-network:
+    driver: bridge
+  photo-service-network:
+    driver: bridge
+  report-service-network:
+    driver: bridge
