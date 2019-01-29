@@ -6,7 +6,11 @@ import errorHandler from './errorHandler';
 import RabbitmqConsumer from "./queueConsumer/rabbitmqConsumer";
 import {photosMessageHandler} from "./handlers";
 
-const {PORT, DB_HOST, DB_PORT, DB_NAME, QUEUE_HOST, QUEUE_PORT, IMAGES_QUEUE_NAME} = process.env;
+const {PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, QUEUE_HOST, QUEUE_USER, QUEUE_PASSWORD, IMAGES_QUEUE_NAME} = process.env;
+
+const DB_PORT = process.env.DB_PORT || 27017;
+const QUEUE_PORT = process.env.QUEUE_PORT || 5672;
+
 
 init().then(() => {
     const app = new Koa();
@@ -22,10 +26,15 @@ init().then(() => {
 
 async function init() {
     try {
-        await mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`, { useNewUrlParser: true });
+        await mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/`, { 
+            useNewUrlParser: true,
+            user: DB_USER, 
+            pass: DB_PASSWORD, 
+            dbName: DB_NAME,
+        });
         console.log('Database connection successful');
 
-        const rabbitmqConsumer = new RabbitmqConsumer(`amqp://${QUEUE_HOST}:${QUEUE_PORT}`);
+        const rabbitmqConsumer = new RabbitmqConsumer(`amqp://${QUEUE_HOST}:${QUEUE_PORT}/`);
         await rabbitmqConsumer.init();
         console.log('Rabbitmq connection successful');
 

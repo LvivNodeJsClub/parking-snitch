@@ -1,0 +1,69 @@
+version: "3"
+
+services:
+ 
+  db-host:
+    image: mongo:latest
+    ports:
+      - "27017"
+
+  queue-host:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  inspector-service-host:
+    image: inspector-service
+    build:
+      context: ./inspector-service
+      dockerfile: Dockerfile
+    restart: on-failure
+    links:
+      - db-host
+    ports:
+      - "3003:3000"
+    environment:
+      DB_HOST: db-host
+      DB_NAME: inspector-service-db
+
+  photo-service-host:
+    image: photo-service
+    build:
+      context: ./photo-service
+      dockerfile: Dockerfile
+    restart: on-failure
+    links:
+      - db-host
+      - queue-host
+    ports:
+      - "3002:3000"
+    volumes:
+      - photo-storage:/usr/app/storage
+    environment:
+      DB_HOST: db-host
+      DB_NAME: photo-service-db
+      QUEUE_HOST: queue-host
+      FILE_PATH: storage
+
+  report-service-host:
+    image: report-service
+    build:
+      context: ./report-service
+      dockerfile: Dockerfile
+    restart: on-failure
+    links:
+      - db-host
+      - queue-host
+    ports:
+      - "3001:3000"
+    environment:
+      DB_HOST: db-host
+      DB_NAME: report-service-db
+      QUEUE_HOST: queue-host
+
+volumes:
+  photo-storage:

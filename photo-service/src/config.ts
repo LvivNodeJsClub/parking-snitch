@@ -7,9 +7,9 @@ const config = {
     db: {
         host: process.env.DB_HOST || "localhost",
         port: process.env.DB_PORT || 27017,
-        name: process.env.DB_NAME || "snitch",
-        user: process.env.DB_USER || "user",
-        password: process.env.DB_PASSWORD || "password",
+        name: process.env.DB_NAME || "",
+        user: process.env.DB_USER || "",
+        password: process.env.DB_PASSWORD || "",
         connection: "",
     },
     queue: {
@@ -20,6 +20,6 @@ const config = {
     }
 };
 
-config.db.connection = `mongodb://${config.db.user}:${config.db.password}@${config.db.host}:${config.db.port}/${config.db.name}`;
+config.db.connection = `mongodb://${config.db.host}:${config.db.port}/`;
 config.queue.connection = `amqp://${config.queue.host}:${config.queue.port}`;
 export default config;
