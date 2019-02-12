@@ -1,3 +1,8 @@
 import Koa from 'koa';
+import routes from './routes/index';
 
-export default new Koa();
+const app = new Koa();
+
+app.use(routes.routes());
+
+export default app;
