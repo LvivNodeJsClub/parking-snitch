@@ -55,7 +55,7 @@ describe('Notification integration test', function () {
         });
 
         expect(resultFromDB).not.to.be.null;
-        expect(resultFromDB && resultFromDB.inspectorId).to.be.equal(inspectorId);
-        expect(resultFromDB && resultFromDB.reportId).to.be.equal(reportId);
+        expect(resultFromDB).to.have.property('inspectorId').to.be.equal(inspectorId);
+        expect(resultFromDB).to.have.property('reportId').to.be.equal(reportId);
     });
 });
