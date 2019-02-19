@@ -16,6 +16,10 @@ describe('Notification integration test', function () {
         server = app.listen(PORT);
     });
 
+    afterEach(async function () {
+        await Notification.deleteMany({});
+    });
+
     after(async function () {
         server.close();
         await mongoose.connection.close();
