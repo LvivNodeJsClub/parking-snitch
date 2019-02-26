@@ -6,11 +6,13 @@ export interface NotificationModel extends Document {
     _id: string
     inspectorId: string
     reportId: string
+    type: string
 }
 
 const notificationSchema = new Schema({
     inspectorId: Schema.Types.String,
-    reportId: Schema.Types.String
+    reportId: Schema.Types.String,
+    type: Schema.Types.String
 });
 
 export const Notification: Model<NotificationModel> = mongoose.model<NotificationModel>('Notification', notificationSchema);

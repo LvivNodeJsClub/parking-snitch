@@ -1,13 +1,27 @@
 import HttpStatusCodes from "http-status-codes";
-import {Notification} from '../models/notification';
+import {Notification, NotificationModel} from '../models/notification';
 import {Context} from 'koa';
 
+export interface NotificationResponse {
+    id: string
+}
+
+function toNotificationResponse(model: NotificationModel): NotificationResponse {
+    const { _id:id } = model;
+    return { id }
+}
+
 export const notify = async (ctx: Context) => {
-    const notification = new Notification({inspectorId: ctx.request.body.inspectorId, reportId: ctx.request.body.reportId});
-    await notification.save();
+    const types = ctx.request.body.types as Array<string> || ['EMAIL'];
+
+    const notifications = types.map((type:string) => ({
+        inspectorId: ctx.request.body.inspectorId,
+        reportId: ctx.request.body.reportId,
+        type
+    }));
+
+    const res = await Notification.insertMany(notifications);
 
     ctx.status = HttpStatusCodes.CREATED;
-    ctx.response.body = {
-        id: notification._id
-    };
+    ctx.response.body = res.map(toNotificationResponse);
 };
