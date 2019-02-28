@@ -1,0 +1,126 @@
+version: "3"
+
+services:
+ 
+  inspector-db-host:
+    image: mongo:4.0-xenial
+    ports:
+      - "27017"
+    volumes:
+      - inspector-db-storage:/data/db
+    networks:
+      - inspector-service-network
+    environment:
+      MONGO_INITDB_DATABASE: inspector-service-db
+      MONGO_INITDB_ROOT_USERNAME: inspector-service-db-user
+      MONGO_INITDB_ROOT_PASSWORD: ${INSPECTOR_SERVICE_DB_PASS}
+
+  inspector-service-host:
+    image: inspector-service:${INSPECTOR_SERVICE_VERSION}
+    restart: on-failure
+    links:
+      - inspector-db-host
+    ports:
+      - "3003:3000"
+    networks:
+      - inspector-service-network
+    environment:
+      DB_HOST: inspector-db-host
+      DB_NAME: inspector-service-db
+      DB_USER: inspector-service-db-user
+      DB_PASSWORD: ${INSPECTOR_SERVICE_DB_PASS}
+
+  photo-db-host:
+    image: mongo:4.0-xenial
+    ports:
+      - "27017"
+    volumes:
+      - photo-db-storage:/data/db
+    networks:
+      - photo-service-network
+    environment:
+      MONGO_INITDB_DATABASE: photo-service-db
+      MONGO_INITDB_ROOT_USERNAME: photo-service-db-user
+      MONGO_INITDB_ROOT_PASSWORD: ${PHOTO_SERVICE_DB_PASS}
+
+  photo-queue-host:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+      # RABBITMQ_DEFAULT_USER: photo-service-queue-user
+      # RABBITMQ_DEFAULT_PASS: ${PHOTO_SERVICE_QUEUE_PASS}
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - photo-service-network
+      - report-service-network
+
+  photo-service-host:
+    image: photo-service:${PHOTO_SERVICE_VERSION}
+    restart: on-failure
+    links:
+      - photo-db-host
+      - photo-queue-host
+    ports:
+      - "3002:3000"
+    volumes:
+      - photo-storage:/usr/app/storage
+    networks:
+      - photo-service-network
+    environment:
+      DB_HOST: photo-db-host
+      DB_NAME: photo-service-db
+      DB_USER: photo-service-db-user
+      DB_PASSWORD: ${PHOTO_SERVICE_DB_PASS}
+      QUEUE_HOST: photo-queue-host
+      # QUEUE_USER: photo-service-queue-user
+      # QUEUE_PASSWORD: ${PHOTO_SERVICE_QUEUE_PASS}
+      FILE_PATH: storage
+
+  report-db-host:
+    image: mongo:4.0-xenial
+    ports:
+      - "27017"
+    volumes:
+      - report-db-storage:/data/db
+    networks:
+      - report-service-network
+    environment:
+      MONGO_INITDB_DATABASE: report-service-db
+      MONGO_INITDB_ROOT_USERNAME: report-service-db-user
+      MONGO_INITDB_ROOT_PASSWORD: ${REPORT_SERVICE_DB_PASS}
+
+  report-service-host:
+    image: report-service:${REPORT_SERVICE_VERSION}
+    restart: on-failure
+    links:
+      - report-db-host
+      - photo-queue-host
+    ports:
+      - "3001:3000"
+    networks:
+      - report-service-network
+    environment:
+      DB_HOST: report-db-host
+      DB_NAME: report-service-db
+      DB_USER: report-service-db-user
+      DB_PASSWORD: ${REPORT_SERVICE_DB_PASS}
+      QUEUE_HOST: photo-queue-host
+      # QUEUE_USER: report-service-queue-user
+      # QUEUE_PASSWORD: ${PHOTO_SERVICE_QUEUE_PASS}
+
+volumes:
+  photo-storage:
+  inspector-db-storage:
+  photo-db-storage:
+  report-db-storage:
+
+networks:
+  inspector-service-network:
+    driver: bridge
+  photo-service-network:
+    driver: bridge
+  report-service-network:
+    driver: bridge

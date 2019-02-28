@@ -4,7 +4,9 @@ import bodyParser from "body-parser";
 import router from './routes';
 import {logErrors, handleError} from './errorHandler';
 
-const {PORT, DB_HOST, DB_PORT, DB_NAME} = process.env;
+const {PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME} = process.env;
+
+const DB_PORT = process.env.DB_PORT || 27017;
 
 init().then(() => {
     // init express application
@@ -27,7 +29,12 @@ init().then(() => {
 
 async function init() {
     try {
-        await mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`, {useNewUrlParser: true});
+        await mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/`, {
+            useNewUrlParser: true,
+            user: DB_USER, 
+            pass: DB_PASSWORD, 
+            dbName: DB_NAME,
+        });
         console.log('Database connection successful');
     } catch (error) {
         console.error(error);

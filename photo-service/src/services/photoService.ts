@@ -12,7 +12,9 @@ export default class PhotoService {
         this.storage = StorageManager.getStorage(storageType);
         mongoose.connect(config.db.connection, {
             useNewUrlParser: true,
-            auth: {authdb: "admin"},
+            user: config.db.user, 
+            pass: config.db.password, 
+            dbName: config.db.name,
         });
         this.db = mongoose.connection;
         this.db.on("error", logger.error.bind("Connection error"));
