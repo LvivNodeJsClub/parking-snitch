@@ -128,11 +128,44 @@ services:
       # QUEUE_PASSWORD: ${PHOTO_SERVICE_QUEUE_PASS}
       REPORT_QUEUE_HOST: report-queue-host
 
+  report-processing-db-host:
+    image: mongo:4.0-xenial
+    ports:
+      - "27017"
+    volumes:
+      - report-processing-db-storage:/data/db
+    networks:
+      - report-processing-service-network
+    environment:
+      MONGO_INITDB_DATABASE: report-processing-service-db
+      MONGO_INITDB_ROOT_USERNAME: report-processing-service-db-user
+      MONGO_INITDB_ROOT_PASSWORD: ${REPORT_SERVICE_DB_PASS}
+
+  report-processing-service-host:
+    image: report-processing-service:${REPORT_SERVICE_VERSION}
+    restart: on-failure
+    links:
+      - report-processing-db-host
+      - photo-queue-host
+    ports:
+      - "3001:3000"
+    networks:
+      - report-processing-service-network
+    environment:
+      DB_HOST: report-processing-db-host
+      DB_NAME: report-processing-service-db
+      DB_USER: report-processing-service-db-user
+      DB_PASSWORD: ${REPORT_SERVICE_DB_PASS}
+      QUEUE_HOST: photo-queue-host
+      # QUEUE_USER: report-service-queue-user
+      # QUEUE_PASSWORD: ${PHOTO_SERVICE_QUEUE_PASS}
+
 volumes:
   # photo-storage:
   inspector-db-storage:
   photo-db-storage:
   report-db-storage:
+  report-processing-db-storage:
 
 networks:
   inspector-service-network:
@@ -140,4 +173,6 @@ networks:
   photo-service-network:
     driver: bridge
   report-service-network:
+    driver: bridge
+  report-processing-service-network:
     driver: bridge

@@ -88,6 +88,119 @@ pipeline {
         }
 
         /*
+         * Build `report-processing-service`
+         */
+        stage('Init environment variables for report-processing-service') {
+            when {
+                anyOf {
+                    branch 'master'
+                    buildingTag()
+                    expression {
+                        return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-processing-service'")
+                    }
+                }
+            }
+            steps {
+                echo 'Init environment variables for report-processing-service'
+                env.REPORTPROCESSINGSERVICE = true
+            }
+        }
+        stage('Install report-processing-service') {
+            when {
+                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+            }
+            steps {
+                script {
+                    dir ('report-processing-service') {
+                        sh 'npm ci'
+                    }
+                }
+            }
+        }
+        stage('Lint report-processing-service') {
+            when {
+                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+            }
+            steps {
+                script {
+                    dir ('report-processing-service') {
+                        sh 'npm lint'
+                    }
+                }
+            }
+        }
+        stage('Building report-processing-service') {
+            when {
+                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+            }
+            steps {
+                script {
+                    dir ('report-processing-service') {
+                        sh 'npm build'
+                    }
+                }
+            }
+        }
+        stage('Testing report-processing-service') {
+            when {
+                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+            }
+            steps {
+                script {
+                    dir ('report-processing-service') {
+                        sh 'npm test'
+                    }
+                }
+            }
+            post {
+                always {
+                  echo 'Save report'
+                }
+            }
+        }
+        stage('Spec report-processing-service') {
+            when {
+                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+            }
+            steps {
+                script {
+                    dir ('report-processing-service') {
+                        sh 'npm spec'
+                    }
+                }
+            }
+            post {
+                always {
+                  echo 'Save report'
+                }
+            }
+        }
+        stage('Build docker image for report-processing-service') {
+            when {
+                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+            }
+            steps {
+                script {
+                    dir ('report-processing-service') {
+                        sh 'docker build .'
+                    }
+                }
+            }
+        }
+        stage('Publish artifacts for report-processing-service') {
+            when {
+                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+            }
+            steps {
+                script {
+                    dir ('report-service') {
+                        sh 'docker push'
+                    }
+                }
+            }
+        }
+
+        /*
          * Build `image-service`
          */
         stage('Init environment variables for image-service') {
