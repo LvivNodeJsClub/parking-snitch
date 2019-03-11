@@ -201,7 +201,7 @@ pipeline {
                         allowMissing: false,
                         alwaysLinkToLastBuild: false,
                         keepAll: true,
-                        reportDir: '/report-processing-service/spec-report',
+                        reportDir: 'report-processing-service/spec-report',
                         reportFiles: 'index.html',
                         reportName: 'Report Processing Spec Report'
                     ]
@@ -209,7 +209,7 @@ pipeline {
                         allowMissing: false,
                         alwaysLinkToLastBuild: false,
                         keepAll: true,
-                        reportDir: '/report-processing-service/spec-coverage',
+                        reportDir: 'report-processing-service/spec-coverage',
                         reportFiles: 'index.html',
                         reportName: 'Report Processing spec Coverage Report'
                   ]
