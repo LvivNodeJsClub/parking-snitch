@@ -161,6 +161,7 @@ pipeline {
             post {
                 always {
                     echo 'Save report'
+                    junit 'report-processing-service/test-report/**/*.xml'
                     publishHTML target: [
                         allowMissing: false,
                         alwaysLinkToLastBuild: false,
@@ -194,7 +195,24 @@ pipeline {
             }
             post {
                 always {
-                  echo 'Save report'
+                    echo 'Save report'
+                    junit 'report-processing-service/spec-report/**/*.xml'
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: '/report-processing-service/spec-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing Spec Report'
+                    ]
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: '/report-processing-service/spec-coverage',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing spec Coverage Report'
+                  ]
                 }
             }
         }
@@ -372,9 +390,6 @@ pipeline {
     }
 
     post {
-        always {
-            junit 'report-processing-service/test-report/**/*.xml'
-        }
         success {
             echo "BUILD SUCCESS: Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]\nCheck console output at: ${env.BUILD_URL}"
         }
