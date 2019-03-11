@@ -172,7 +172,7 @@ pipeline {
                 echo 'Spec report-processing-service'
                 script {
                     dir ('report-processing-service') {
-                        sh 'npm spec'
+                        sh 'npm run spec'
                     }
                 }
             }
