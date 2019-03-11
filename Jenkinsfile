@@ -179,7 +179,7 @@ pipeline {
                         allowMissing: false,
                         alwaysLinkToLastBuild: false,
                         keepAll: true,
-                        reportDir: '/report-processing-service/test-report',
+                        reportDir: 'report-processing-service/test-report',
                         reportFiles: 'index.html',
                         reportName: 'Report Processing Test Report'
                     ]
@@ -187,7 +187,7 @@ pipeline {
                         allowMissing: false,
                         alwaysLinkToLastBuild: false,
                         keepAll: true,
-                        reportDir: '/report-processing-service/test-coverage',
+                        reportDir: 'report-processing-service/test-coverage',
                         reportFiles: 'index.html',
                         reportName: 'Report Processing Test Coverage Report'
                   ]
