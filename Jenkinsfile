@@ -102,7 +102,9 @@ pipeline {
             }
             steps {
                 echo 'Init environment variables for report-processing-service'
-                env.REPORTPROCESSINGSERVICE = true
+                script {
+                    env.REPORTPROCESSINGSERVICE = true
+                }
             }
         }
         stage('Install report-processing-service') {
@@ -110,6 +112,7 @@ pipeline {
                 environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
             }
             steps {
+                echo 'Install report-processing-service'
                 script {
                     dir ('report-processing-service') {
                         sh 'npm ci'
@@ -122,6 +125,7 @@ pipeline {
                 environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
             }
             steps {
+                echo 'Lint report-processing-service'
                 script {
                     dir ('report-processing-service') {
                         sh 'npm lint'
@@ -134,6 +138,7 @@ pipeline {
                 environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
             }
             steps {
+                echo 'Building report-processing-service'
                 script {
                     dir ('report-processing-service') {
                         sh 'npm build'
@@ -146,6 +151,7 @@ pipeline {
                 environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
             }
             steps {
+                echo 'Testing report-processing-service'
                 script {
                     dir ('report-processing-service') {
                         sh 'npm test'
@@ -163,6 +169,7 @@ pipeline {
                 environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
             }
             steps {
+                echo 'Spec report-processing-service'
                 script {
                     dir ('report-processing-service') {
                         sh 'npm spec'
@@ -180,6 +187,7 @@ pipeline {
                 environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
             }
             steps {
+                echo 'Build docker image for report-processing-service'
                 script {
                     dir ('report-processing-service') {
                         sh 'docker build .'
@@ -192,6 +200,7 @@ pipeline {
                 environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
             }
             steps {
+                echo 'Publish artifacts for report-processing-service'
                 script {
                     dir ('report-service') {
                         sh 'docker push'
