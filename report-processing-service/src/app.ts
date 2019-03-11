@@ -1,4 +1,4 @@
-import Koa from 'Koa';
+import Koa from 'koa';
 import healthcheck from './routes/healthcheck';
 
 const app = new Koa();
