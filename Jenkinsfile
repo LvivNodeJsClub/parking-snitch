@@ -128,7 +128,7 @@ pipeline {
                 echo 'Lint report-processing-service'
                 script {
                     dir ('report-processing-service') {
-                        sh 'npm lint'
+                        sh 'npm run lint'
                     }
                 }
             }

@@ -7,7 +7,8 @@
   "scripts": {
     "clean": "rm -rf node_modules/ && rm -rf test-coverage && rm -rf test-report && rm -rf spec-coverage && rm -rf spec-report && rm -rf dist",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "start": "node dist/index.js",
+    "start": "node index.js",
+    "start:dev": "node dist/index.js",
     "build": "tsc -p .",
     "test": "jest --config=./test.config.json",
     "spec": "jest --config=./spec.config.json"
