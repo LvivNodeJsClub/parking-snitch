@@ -5,7 +5,7 @@
   "description": "Service should get information about new reports from report-service. Select free inspector from inspector-service. And send the notification to inspector thru notification-service.",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf node_modules/ && rm -rf test-coverage && rm -rf test-report && rm -rf spec-coverage && rm -rf spec-report && rm -rf dist",
+    "clean": "rm -rf node_modules/ && rm -rf test-coverage/ && rm -rf test-report/ && rm -rf spec-coverage/ && rm -rf spec-report/ && rm -rf dist/",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "start": "node index.js",
     "start:dev": "node dist/index.js",
