@@ -107,6 +107,19 @@ pipeline {
                 }
             }
         }
+        stage('Clean report-processing-service') {
+            when {
+                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+            }
+            steps {
+                echo 'Clean report-processing-service'
+                script {
+                    dir ('report-processing-service') {
+                        sh 'npm riun clean'
+                    }
+                }
+            }
+        }
         stage('Install report-processing-service') {
             when {
                 environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
