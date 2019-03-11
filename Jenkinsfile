@@ -370,5 +370,18 @@ pipeline {
             }
         }
     }
-}
 
+    post {
+        always {
+            junit 'test-report/**/*.xml'
+        }
+        success {
+            def message = "BUILD SUCCESS: Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]\nCheck console output at: ${env.BUILD_URL}"
+            echo "${message}"
+        }
+        failure {
+            def message = "BUILD FAILURE: Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]\nCheck console output at: ${env.BUILD_URL}"
+            echo "${message}"
+    }
+  }
+}
