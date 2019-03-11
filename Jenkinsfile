@@ -103,7 +103,7 @@ pipeline {
             steps {
                 echo 'Init environment variables for report-processing-service'
                 script {
-                    env.REPORTPROCESSINGSERVICE = true
+                    env.REPORTPROCESSINGSERVICE = 'true'
                 }
             }
         }
