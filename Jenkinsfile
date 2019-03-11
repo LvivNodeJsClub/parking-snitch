@@ -197,7 +197,10 @@ pipeline {
         }
         stage('Publish artifacts for report-processing-service') {
             when {
-                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+                allOf {
+                    environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+                    environment name: 'REPORTPROCESSINGSERVICE', value: 'false'
+                }
             }
             steps {
                 echo 'Publish artifacts for report-processing-service'
