@@ -160,7 +160,23 @@ pipeline {
             }
             post {
                 always {
-                  echo 'Save report'
+                    echo 'Save report'
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'test-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Test Report'
+                    ]
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'test-coverage',
+                        reportFiles: 'index.html',
+                        reportName: 'Test Coverage Report'
+                  ]
                 }
             }
         }
