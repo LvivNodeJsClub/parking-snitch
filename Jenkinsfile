@@ -165,17 +165,17 @@ pipeline {
                         allowMissing: false,
                         alwaysLinkToLastBuild: false,
                         keepAll: true,
-                        reportDir: 'test-report',
+                        reportDir: '/report-processing-service/test-report',
                         reportFiles: 'index.html',
-                        reportName: 'Test Report'
+                        reportName: 'Report Processing Test Report'
                     ]
                     publishHTML target: [
                         allowMissing: false,
                         alwaysLinkToLastBuild: false,
                         keepAll: true,
-                        reportDir: 'test-coverage',
+                        reportDir: '/report-processing-service/test-coverage',
                         reportFiles: 'index.html',
-                        reportName: 'Test Coverage Report'
+                        reportName: 'Report Processing Test Coverage Report'
                   ]
                 }
             }
