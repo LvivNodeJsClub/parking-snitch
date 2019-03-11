@@ -141,7 +141,7 @@ pipeline {
                 echo 'Building report-processing-service'
                 script {
                     dir ('report-processing-service') {
-                        sh 'npm build'
+                        sh 'npm run build'
                     }
                 }
             }
