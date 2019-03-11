@@ -401,13 +401,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        success {
-            echo "BUILD SUCCESS: Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]\nCheck console output at: ${env.BUILD_URL}"
-        }
-        failure {
-            echo "BUILD FAILURE: Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]\nCheck console output at: ${env.BUILD_URL}"
-    }
-  }
 }
