@@ -115,7 +115,7 @@ pipeline {
                 echo 'Clean report-processing-service'
                 script {
                     dir ('report-processing-service') {
-                        sh 'npm riun clean'
+                        sh 'npm run clean'
                     }
                 }
             }
