@@ -161,6 +161,20 @@ services:
       # QUEUE_PASSWORD: ${PHOTO_SERVICE_QUEUE_PASS}
       REPORT_QUEUE_HOST: report-queue-host
 
+  notification-service-host:
+    image: notification-service
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    restart: on-failure
+    links:
+      - db-host
+    ports:
+      - "3004:3000"
+    environment:
+      DB_HOST: db-host
+      DB_NAME: notification-service-db
+
 volumes:
   # photo-storage:
   inspector-db-storage:
