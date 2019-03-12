@@ -33,6 +33,7 @@
     "koa": "^2.6.1",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
-    "mongoose": "^5.3.8"
+    "mongoose": "^5.3.8",
+    "winston": "^3.1.0"
   }
 }
