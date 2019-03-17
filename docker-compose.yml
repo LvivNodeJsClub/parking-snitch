@@ -3,7 +3,7 @@ version: "3"
 services:
  
   inspector-db-host:
-    image: mongo:4.0-xenial
+    image: mongo:3.4
     ports:
       - "27017"
     volumes:
@@ -31,7 +31,7 @@ services:
       DB_PASSWORD: ${INSPECTOR_SERVICE_DB_PASS}
 
   photo-db-host:
-    image: mongo:4.0-xenial
+    image: mongo:3.4
     ports:
       - "27017"
     volumes:
@@ -51,8 +51,8 @@ services:
       # RABBITMQ_DEFAULT_PASS: ${PHOTO_SERVICE_QUEUE_PASS}
       RABBITMQ_DEFAULT_VHOST: /
     ports:
-      - "15672:15672"
-      - "5672:5672"
+      - "15672"
+      - "5672"
     networks:
       - photo-service-network
       - report-service-network
@@ -65,8 +65,8 @@ services:
       - photo-queue-host
     ports:
       - "3002:3000"
-    volumes:
-      - photo-storage:/usr/app/storage
+    # volumes:
+      # - photo-storage:/usr/app/storage
     networks:
       - photo-service-network
     environment:
@@ -75,12 +75,13 @@ services:
       DB_USER: photo-service-db-user
       DB_PASSWORD: ${PHOTO_SERVICE_DB_PASS}
       QUEUE_HOST: photo-queue-host
+      IMAGES_QUEUE_NAME: images-queue
       # QUEUE_USER: photo-service-queue-user
       # QUEUE_PASSWORD: ${PHOTO_SERVICE_QUEUE_PASS}
       FILE_PATH: storage
 
   report-db-host:
-    image: mongo:4.0-xenial
+    image: mongo:3.4
     ports:
       - "27017"
     volumes:
@@ -92,11 +93,25 @@ services:
       MONGO_INITDB_ROOT_USERNAME: report-service-db-user
       MONGO_INITDB_ROOT_PASSWORD: ${REPORT_SERVICE_DB_PASS}
 
+  report-queue-host:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+      # RABBITMQ_DEFAULT_USER: report-service-queue-user
+      # RABBITMQ_DEFAULT_PASS: ${PHOTO_SERVICE_QUEUE_PASS}
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      - "15672"
+      - "5672"
+    networks:
+      - report-service-network
+
   report-service-host:
     image: report-service:${REPORT_SERVICE_VERSION}
     restart: on-failure
     links:
       - report-db-host
+      - report-queue-host
       - photo-queue-host
     ports:
       - "3001:3000"
@@ -108,11 +123,13 @@ services:
       DB_USER: report-service-db-user
       DB_PASSWORD: ${REPORT_SERVICE_DB_PASS}
       QUEUE_HOST: photo-queue-host
+      IMAGES_QUEUE_NAME: images-queue
       # QUEUE_USER: report-service-queue-user
       # QUEUE_PASSWORD: ${PHOTO_SERVICE_QUEUE_PASS}
+      REPORT_QUEUE_HOST: report-queue-host
 
 volumes:
-  photo-storage:
+  # photo-storage:
   inspector-db-storage:
   photo-db-storage:
   report-db-storage:

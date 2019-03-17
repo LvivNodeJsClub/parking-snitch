@@ -1,7 +1,7 @@
 import mongoose, {Connection} from "mongoose";
 import config from "../config";
 import logger from "../logger";
-import PhotoModel from "../models/photo";
+import {Photo as PhotoModel}  from "../models/photo";
 import StorageService, {IFile} from "../storage/storage";
 import StorageManager, {StorageTypes} from "../storage/storageManager";
 
