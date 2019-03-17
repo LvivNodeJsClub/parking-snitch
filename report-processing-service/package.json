@@ -1,0 +1,36 @@
+{
+  "name": "report-processing-service",
+  "version": "1.0.0",
+  "repository": "https://github.com/LvivNodeJsClub/parking-snitch/tree/master/report-processing-service",
+  "description": "Service should get information about new reports from report-service. Select free inspector from inspector-service. And send the notification to inspector thru notification-service.",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf node_modules/ && rm -rf test-coverage/ && rm -rf test-report/ && rm -rf spec-coverage/ && rm -rf spec-report/ && rm -rf dist/",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "start": "node index.js",
+    "start:dev": "node dist/index.js",
+    "build": "tsc -p .",
+    "test": "jest --config=./test.config.json",
+    "spec": "jest --config=./spec.config.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/koa": "^2.0.48",
+    "@types/koa-router": "^7.0.40",
+    "jest": "^24.3.1",
+    "jest-html-reporter": "^2.5.0",
+    "jest-junit": "^6.3.0",
+    "supertest": "^4.0.0",
+    "tslint": "^5.13.1",
+    "tslint-config-airbnb": "^5.11.1",
+    "tslint-config-typings": "^0.3.1",
+    "typescript": "^3.3.3333"
+  },
+  "dependencies": {
+    "http-status-codes": "^1.3.0",
+    "koa": "^2.7.0",
+    "koa-router": "^7.4.0"
+  }
+}

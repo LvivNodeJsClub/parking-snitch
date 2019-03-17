@@ -16,6 +16,22 @@ services:
       - "15672:15672"
       - "5672:5672"
 
+  report-processing-service-host:
+    image: report-processing-service
+    build:
+      context: ./report-processing-service
+      dockerfile: Dockerfile
+    restart: on-failure
+    links:
+      - db-host
+      - queue-host
+    ports:
+      - "3005:3000"
+    environment:
+      DB_HOST: db-host
+      DB_NAME: report-processing-service-db
+      QUEUE_HOST: queue-host
+
   inspector-service-host:
     image: inspector-service
     build:

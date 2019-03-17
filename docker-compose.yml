@@ -2,6 +2,38 @@ version: "3"
 
 services:
  
+  report-processing-db-host:
+    image: mongo:4.0-xenial
+    ports:
+      - "27017"
+    volumes:
+      - report-processing-db-storage:/data/db
+    networks:
+      - report-processing-service-network
+    environment:
+      MONGO_INITDB_DATABASE: report-processing-service-db
+      MONGO_INITDB_ROOT_USERNAME: report-processing-service-db-user
+      MONGO_INITDB_ROOT_PASSWORD: ${REPORT_PROCESSING_SERVICE_DB_PASS}
+
+  report-processing-service-host:
+    image: report-processing-service:${REPORT_PROCESSING_SERVICE_VERSION}
+    restart: on-failure
+    links:
+      - report-processing-db-host
+      - report-queue-host
+    ports:
+      - "3005:3000"
+    networks:
+      - report-processing-service-network
+    environment:
+      DB_HOST: report-processing-db-host
+      DB_NAME: report-processing-service-db
+      DB_USER: report-processing-service-db-user
+      DB_PASSWORD: ${REPORT_PROCESSING_SERVICE_DB_PASS}
+      QUEUE_HOST: report-queue-host
+      # QUEUE_USER: report-service-queue-user
+      # QUEUE_PASSWORD: ${REPORT_SERVICE_QUEUE_PASS}
+
   inspector-db-host:
     image: mongo:3.4
     ports:
@@ -105,6 +137,7 @@ services:
       - "5672"
     networks:
       - report-service-network
+      - report-processing-service-network
 
   report-service-host:
     image: report-service:${REPORT_SERVICE_VERSION}
@@ -133,6 +166,7 @@ volumes:
   inspector-db-storage:
   photo-db-storage:
   report-db-storage:
+  report-processing-db-storage:
 
 networks:
   inspector-service-network:
@@ -140,4 +174,6 @@ networks:
   photo-service-network:
     driver: bridge
   report-service-network:
+    driver: bridge
+  report-processing-service-network:
     driver: bridge
