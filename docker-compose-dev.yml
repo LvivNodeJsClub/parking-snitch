@@ -32,6 +32,20 @@ services:
       DB_NAME: report-processing-service-db
       QUEUE_HOST: queue-host
 
+  notification-service-host:
+    image: notification-service
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    restart: on-failure
+    links:
+      - db-host
+    ports:
+      - "3004:3000"
+    environment:
+      DB_HOST: db-host
+      DB_NAME: notification-service-db
+
   inspector-service-host:
     image: inspector-service
     build:

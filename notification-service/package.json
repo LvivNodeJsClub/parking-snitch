@@ -2,8 +2,11 @@
   "name": "notification-service",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
+    "build": "npm run build:ts",
+    "build:ts": "npx tsc",
+    "start": "node dist/index.js",
     "test": "mocha -r ts-node/register test/**/*.ts"
   },
   "author": "",

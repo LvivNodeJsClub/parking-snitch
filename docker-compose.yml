@@ -34,6 +34,37 @@ services:
       # QUEUE_USER: report-service-queue-user
       # QUEUE_PASSWORD: ${REPORT_SERVICE_QUEUE_PASS}
 
+  notification-db-host:
+    image: mongo:4.0-xenial
+    ports:
+      - "27017"
+    volumes:
+      - notification-db-storage:/data/db
+    networks:
+      - notification-service-network
+    environment:
+      MONGO_INITDB_DATABASE: notification-service-db
+      MONGO_INITDB_ROOT_USERNAME: notification-service-db-user
+      MONGO_INITDB_ROOT_PASSWORD: ${NOTIFICSTION_SERVICE_DB_PASS}
+
+  notification-service-host:
+    image: notification-service:${NOTIFICSTION_SERVICE_VERSION}
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    restart: on-failure
+    links:
+      - notification-db-host
+    ports:
+      - "3004:3000"
+    networks:
+      - notification-service-network
+    environment:
+      DB_HOST: notification-db-host
+      DB_NAME: notification-service-db
+      DB_USER: notification-service-db-user
+      DB_PASSWORD: ${NOTIFICSTION_SERVICE_DB_PASS}
+
   inspector-db-host:
     image: mongo:3.4
     ports:
@@ -166,6 +197,7 @@ volumes:
   inspector-db-storage:
   photo-db-storage:
   report-db-storage:
+  notification-db-storage:
   report-processing-db-storage:
 
 networks:
@@ -174,6 +206,8 @@ networks:
   photo-service-network:
     driver: bridge
   report-service-network:
+    driver: bridge
+  notification-service-network:
     driver: bridge
   report-processing-service-network:
     driver: bridge
