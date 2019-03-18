@@ -30,7 +30,7 @@ services:
       DB_NAME: report-processing-service-db
       DB_USER: report-processing-service-db-user
       DB_PASSWORD: ${REPORT_PROCESSING_SERVICE_DB_PASS}
-      QUEUE_HOST: report-queue-host
+      REPORT_QUEUE_HOST: report-queue-host
       # QUEUE_USER: report-service-queue-user
       # QUEUE_PASSWORD: ${REPORT_SERVICE_QUEUE_PASS}
 
