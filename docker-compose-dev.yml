@@ -13,8 +13,8 @@ services:
       RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
       RABBITMQ_DEFAULT_VHOST: /
     ports:
-      - "15672:15672"
-      - "5672:5672"
+      - "15672"
+      - "5672"
 
   report-processing-service-host:
     image: report-processing-service
@@ -28,6 +28,9 @@ services:
       - "3005:3000"
     environment:
       REPORT_QUEUE_HOST: queue-host
+      REPORT_BASE_PATH: http://report-service-host:3000
+      INSPECTOR_BASE_PATH: http://inspector-service-host:3000
+      NOTIFICATION_BASE_PATH: http://notification-service-host:3000
 
   notification-service-host:
     image: notification-service

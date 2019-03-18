@@ -21,11 +21,17 @@ services:
     links:
       - report-processing-db-host
       - report-queue-host
+      - report-service-host
+      - inspector-service-host
+      - notification-service-host
     ports:
       - "3005:3000"
     networks:
       - report-processing-service-network
     environment:
+      REPORT_BASE_PATH: http://report-service-host:3000
+      INSPECTOR_BASE_PATH: http://inspector-service-host:3000
+      NOTIFICATION_BASE_PATH: http://notification-service-host:3000
       DB_HOST: report-processing-db-host
       DB_NAME: report-processing-service-db
       DB_USER: report-processing-service-db-user
@@ -59,6 +65,7 @@ services:
       - "3004:3000"
     networks:
       - notification-service-network
+      - report-processing-service-network
     environment:
       DB_HOST: notification-db-host
       DB_NAME: notification-service-db
@@ -87,6 +94,7 @@ services:
       - "3003:3000"
     networks:
       - inspector-service-network
+      - report-processing-service-network
     environment:
       DB_HOST: inspector-db-host
       DB_NAME: inspector-service-db
@@ -181,6 +189,7 @@ services:
       - "3001:3000"
     networks:
       - report-service-network
+      - report-processing-service-network
     environment:
       DB_HOST: report-db-host
       DB_NAME: report-service-db
