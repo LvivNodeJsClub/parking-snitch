@@ -4,12 +4,16 @@ import ReportReadyForProcessingMessageConsumer from "./queueConsumer/reportReady
 import config from "./config";
 import ReportReadyHandler from "./handlers/reportReadyHandler";
 import {ReportClient} from "./services/reportClient";
+import {InspectorClient} from "./services/inspectorClient";
+import {NotificationClient} from "./services/notificationClient";
 
 const app = new Koa();
 app.use(healthcheck.routes());
 
 const reportClient = new ReportClient(config.reportBasePath);
-const reportReadyHandler = new ReportReadyHandler(reportClient);
+const inspectorClient = new InspectorClient(config.inspectorBasePath);
+const notificationClient = new NotificationClient(config.notificationBasePath);
+const reportReadyHandler = new ReportReadyHandler(reportClient, inspectorClient, notificationClient);
 
 const consumer = new ReportReadyForProcessingMessageConsumer(config.reportReadyForProcessingQueue.connection);
 consumer.init()
