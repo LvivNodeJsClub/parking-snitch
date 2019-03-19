@@ -18,7 +18,7 @@ export default class ReportReadyForProcessingMessageConsumer {
         this.initialized = true;
     }
 
-    async consumeMessagesFromQueue(queue: string, onMessage: (reportId: string | null) => Promise<void>): Promise<void> {
+    async consumeMessagesFromQueue(queue: string, onMessage: (reportId: string) => Promise<void>): Promise<void> {
         if (!this.channel) {
             throw new Error("The ReportReadyForProcessingMessageConsumer instance is not initialised yet");
         }
