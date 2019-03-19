@@ -5,6 +5,8 @@
   ],
   "jsRules": {},
   "rules": {
+    "ordered-imports": false,
+    "object-literal-sort-keys": false,
     "quotemark": [
       true,
       "single"

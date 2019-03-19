@@ -1,11 +1,11 @@
-import Koa from 'koa';
+import config from './config';
 import healthcheck from './routes/healthcheck';
-import ReportReadyForProcessingMessageConsumer from "./queueConsumer/reportReadyForProcessingMessageConsumer";
-import config from "./config";
-import ReportReadyHandler from "./handlers/reportReadyHandler";
-import {ReportClient} from "./services/reportClient";
-import {InspectorClient} from "./services/inspectorClient";
-import {NotificationClient} from "./services/notificationClient";
+import Koa from 'koa';
+import InspectorClient from './services/inspectorClient';
+import NotificationClient from './services/notificationClient';
+import ReportClient from './services/reportClient';
+import ReportReadyForProcessingMessageConsumer from './queueConsumer/reportReadyForProcessingMessageConsumer';
+import ReportReadyHandler from './handlers/reportReadyHandler';
 
 const app = new Koa();
 app.use(healthcheck.routes());
@@ -18,7 +18,8 @@ const reportReadyHandler = new ReportReadyHandler(reportClient, inspectorClient,
 const consumer = new ReportReadyForProcessingMessageConsumer(config.reportReadyForProcessingQueue.connection);
 consumer.init()
     .then(() => {
-        return consumer.consumeMessagesFromQueue(config.reportReadyForProcessingQueue.queueName, reportReadyHandler.handler);
+        const queueName = config.reportReadyForProcessingQueue.queueName;
+        return consumer.consumeMessagesFromQueue(queueName, reportReadyHandler.handler);
     })
     .catch((error) => {
         console.error(error);

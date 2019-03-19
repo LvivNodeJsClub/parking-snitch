@@ -1,20 +1,20 @@
-const request = require('request-promise');
+import request from 'request-promise';
 
-export class NotificationClient {
+export default class NotificationClient {
     constructor(private url: string) {
 
     }
 
     public async notify(reportId: string, inspectorId: string) {
         return request({
+            body: {
+                inspectorId,
+                reportId,
+                types: ['SMS', 'EMAIL'],
+            },
             json: true,
             method: 'POST',
             uri: `${this.url}/notify`,
-            body: {
-                reportId,
-                inspectorId,
-                types: ["SMS", "EMAIL"]
-            }
         });
     }
 }

@@ -1,6 +1,6 @@
-import {ReportClient} from "../services/reportClient";
-import {InspectorClient} from "../services/inspectorClient";
-import {NotificationClient} from "../services/notificationClient";
+import InspectorClient from '../services/inspectorClient';
+import NotificationClient from '../services/notificationClient';
+import ReportClient from '../services/reportClient';
 
 export default class ReportReadyHandler {
     constructor(private reportClient: ReportClient,
@@ -17,5 +17,5 @@ export default class ReportReadyHandler {
         console.log(`inspectorInfo: ${JSON.stringify(inspectorInfo)}`);
         const notificationInfo = await this.notificationClient.notify(reportInfo._id, inspectorInfo._id);
         console.log(`notificationInfo: ${JSON.stringify(notificationInfo)}`);
-    };
+    }
 }

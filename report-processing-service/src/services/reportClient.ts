@@ -1,6 +1,6 @@
-const request = require('request-promise');
+import request from 'request-promise';
 
-export class ReportClient {
+export default class ReportClient {
     constructor(private url: string) {
 
     }
@@ -8,7 +8,7 @@ export class ReportClient {
     public async getReportById(reportId: string) {
         return request({
             json: true,
-            uri: `${this.url}/reports/${reportId}`
+            uri: `${this.url}/reports/${reportId}`,
         });
     }
 }

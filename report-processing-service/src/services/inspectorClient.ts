@@ -1,6 +1,6 @@
-const request = require('request-promise');
+import request from 'request-promise';
 
-export class InspectorClient {
+export default class InspectorClient {
     constructor(private url: string) {
 
     }
@@ -8,7 +8,7 @@ export class InspectorClient {
     public async getNearest(location: any) {
         return request({
             json: true,
-            uri: `${this.url}/inspectors/nearest?lat=${location.lat}&lon=${location.lon}`
+            uri: `${this.url}/inspectors/nearest?lat=${location.lat}&lon=${location.lon}`,
         });
     }
 }
