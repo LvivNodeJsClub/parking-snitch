@@ -1,0 +1,521 @@
+{
+	"info": {
+		"_postman_id": "acafa7d0-b784-4714-9adb-963734f23e2f",
+		"name": "Parking snitch",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "report-service",
+			"item": [
+				{
+					"name": "Create report",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "43fd51b7-e483-4b9c-979d-016a163a8f63",
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Get info', function () {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set(\"report-id\", body._id);",
+									"    pm.environment.set(\"report-lat\", body.location.lat);",
+									"    pm.environment.set(\"report-lon\", body.location.lon);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "61022c83-7712-4bcb-a018-076446326144",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"description\": \"description text\",\n\t\"location\" : {\n\t\t\"lat\": 1.2,\n\t\t\"lon\": 1.3\n\t}\n}"
+						},
+						"url": {
+							"raw": "{{report-service-basepath}}/reports",
+							"host": [
+								"{{report-service-basepath}}"
+							],
+							"path": [
+								"reports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get report",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0823af9f-8291-4315-b11a-4d4f92847ab1",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Get info', function () {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set(\"report-id\", body._id);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{report-service-basepath}}/reports/{{report-id}}",
+							"host": [
+								"{{report-service-basepath}}"
+							],
+							"path": [
+								"reports",
+								"{{report-id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "photo-service",
+			"item": [
+				{
+					"name": "Upload photo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "25909b49-cfb2-4066-892b-3d135543c0ad",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Get info', function () {",
+									"    const body = pm.response.json();",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": ""
+								},
+								{
+									"key": "reportId",
+									"value": "{{report-id}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{photo-service-basepath}}/images/upload",
+							"host": [
+								"{{photo-service-basepath}}"
+							],
+							"path": [
+								"images",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "inspector-service",
+			"item": [
+				{
+					"name": "Create inspector",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f8068a53-4df3-4b26-963d-ec6e31a56dfe",
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Get info', function () {",
+									"    const body = pm.response.json();",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "aa89e4a4-b968-4cef-82aa-60a37da7a6e1",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"petro\",\n\t\"email\": \"petro@lviv.ua\",\n    \"location\": {\n        \"lat\": \"2.3\",\n        \"lon\": \"2.4\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{inspector-service-basepath}}/inspectors",
+							"host": [
+								"{{inspector-service-basepath}}"
+							],
+							"path": [
+								"inspectors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create second inspector",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f8068a53-4df3-4b26-963d-ec6e31a56dfe",
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Get info', function () {",
+									"    const body = pm.response.json();",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "aa89e4a4-b968-4cef-82aa-60a37da7a6e1",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"ivan\",\n\t\"email\": \"ivan@lviv.ua\",\n    \"location\": {\n        \"lat\": \"3.3\",\n        \"lon\": \"3.4\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{inspector-service-basepath}}/inspectors",
+							"host": [
+								"{{inspector-service-basepath}}"
+							],
+							"path": [
+								"inspectors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get nearest inspector",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f8068a53-4df3-4b26-963d-ec6e31a56dfe",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Get info', function () {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set(\"inspector-id\", body._id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "aa89e4a4-b968-4cef-82aa-60a37da7a6e1",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"petro\",\n\t\"email\": \"petro@lviv.ua\",\n    \"location\": {\n        \"lat\": \"2.3\",\n        \"lon\": \"2.4\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{inspector-service-basepath}}/inspectors/nearest?lat={{report-lat}}&lon={{report-lon}}",
+							"host": [
+								"{{inspector-service-basepath}}"
+							],
+							"path": [
+								"inspectors",
+								"nearest"
+							],
+							"query": [
+								{
+									"key": "lat",
+									"value": "{{report-lat}}"
+								},
+								{
+									"key": "lon",
+									"value": "{{report-lon}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all inspectors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a5e3b503-bdc6-4e09-b0b1-c7ab306c711a",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Get info', function () {",
+									"    const body = pm.response.json();",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{inspector-service-basepath}}/inspectors",
+							"host": [
+								"{{inspector-service-basepath}}"
+							],
+							"path": [
+								"inspectors"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "notification-service",
+			"item": [
+				{
+					"name": "Create notification",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4b5c38cf-a4d8-452c-91c0-8f19807dbcf6",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Get info', function () {",
+									"    const body = pm.response.json();",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"inspectorId\": \"{{inspector-id}}\",\n    \"reportId\": \"{{report-id}}\",\n    \"types\": [\"SMS\", \"EMAIL\"]\n}"
+						},
+						"url": {
+							"raw": "{{notification-service-basepath}}/notify",
+							"host": [
+								"{{notification-service-basepath}}"
+							],
+							"path": [
+								"notify"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "report-processing-service",
+			"item": [
+				{
+					"name": "Healthcheck",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ac68a3c1-a5ce-4ebc-b595-b5770fa644da",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"inspectorId\": \"{{inspector-id}}\",\n    \"reportId\": \"{{report-id}}\",\n    \"types\": [\"SMS\", \"EMAIL\"]\n}"
+						},
+						"url": {
+							"raw": "{{report-processing-service-basepath}}/healthcheck",
+							"host": [
+								"{{report-processing-service-basepath}}"
+							],
+							"path": [
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
