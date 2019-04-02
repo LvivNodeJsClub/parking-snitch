@@ -57,23 +57,19 @@ pipeline {
             parallel {
                 stage('Nested 1') {
                     stages {
-                    stage('Nested 11') {
-                        steps {
-                            echo "In stage Nested 1 within Branch C"
+                        stage('Nested 11') {
+                            steps {
+                                echo "In stage Nested 1 within Branch C"
+                            }
                         }
-                    }
-                     stage('Nested 12') {
-                        steps {
-                            echo "In stage Nested 1 within Branch C"
+                         stage('Nested 12') {
+                            steps {
+                                echo "In stage Nested 1 within Branch C"
+                            }
                         }
                     }
                 }
-                }
-                stage('Nested 2') {
-                    steps {
-                        echo "In stage Nested 2 within Branch C"
-                    }
-                } 
+                load 'report-processing-service/Jenkinsfile'
             }
         }
     }
