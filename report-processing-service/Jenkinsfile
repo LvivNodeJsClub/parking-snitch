@@ -2,17 +2,14 @@
 // * Build `report-processing-service`
 // */
 
-step('Init environment variables for report-processing-service 1') {
-    echo 'Init environment variables for report-processing-service'
-    script {
-        env.REPORTPROCESSINGSERVICE = 'true'
-    }
-}
-
-step('Init environment variables for report-processing-service 2') {
-    echo 'Init environment variables for report-processing-service'
-    script {
-        env.REPORTPROCESSINGSERVICE = 'true'
+stages {
+    stage('Init environment variables for report-processing-service') {
+        steps {
+            echo 'Init environment variables for report-processing-service'
+            script {
+                env.REPORTPROCESSINGSERVICE = 'true'
+            }
+        }
     }
 }
 
