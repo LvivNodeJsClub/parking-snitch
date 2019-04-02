@@ -15,7 +15,7 @@ pipeline {
             }
         }
 
-        stage 'Build services.' {
+        stage('Build services.') {
             steps {
                 script {
                     def services = [:]
@@ -23,7 +23,7 @@ pipeline {
                         echo "This is branch c"
                     }
                     services['Report Processing Service'] = {
-                        echo "This is branch d"
+                        load 'report-processing-service/Jenkinsfile'
                     }
                     parallel services
 
