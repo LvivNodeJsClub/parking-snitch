@@ -3,15 +3,15 @@
 */
 // stages {
     stage('Init environment variables for report-processing-service') {
-        when {
-            anyOf {
-                branch 'master'
-                buildingTag()
-                expression {
-                    return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-processing-service'")
-                }
-            }
-        }
+        // when {
+        //     anyOf {
+        //         branch 'master'
+        //         buildingTag()
+        //         expression {
+        //             return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-processing-service'")
+        //         }
+        //     }
+        // }
         steps {
             echo 'Init environment variables for report-processing-service'
             script {
@@ -21,9 +21,9 @@
     }
 
     stage('Clean report-processing-service') {
-        when {
-            environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-        }
+        // when {
+        //     environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+        // }
         steps {
             echo 'Clean report-processing-service'
             script {
@@ -35,9 +35,9 @@
     }
 
     stage('Install report-processing-service') {
-        when {
-            environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-        }
+        // when {
+        //     environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+        // }
         steps {
             echo 'Install report-processing-service'
             script {
@@ -49,9 +49,9 @@
     }
 
     stage('Lint report-processing-service') {
-        when {
-            environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-        }
+        // when {
+        //     environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+        // }
         steps {
             echo 'Lint report-processing-service'
             script {
@@ -63,9 +63,9 @@
     }
 
     stage('Building report-processing-service') {
-        when {
-            environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-        }
+        // when {
+        //     environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+        // }
         steps {
             echo 'Building report-processing-service'
             script {
@@ -77,9 +77,9 @@
     }
 
     stage('Testing report-processing-service') {
-        when {
-            environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-        }
+        // when {
+        //     environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+        // }
         steps {
             echo 'Testing report-processing-service'
             script {
@@ -113,9 +113,9 @@
     }
 
     stage('Spec report-processing-service') {
-        when {
-            environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-        }
+        // when {
+        //     environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+        // }
         steps {
             echo 'Spec report-processing-service'
             script {
@@ -149,9 +149,9 @@
     }
 
     stage('Build docker image for report-processing-service') {
-        when {
-            environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-        }
+        // when {
+        //     environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+        // }
         steps {
             echo 'Build docker image for report-processing-service'
             script {
@@ -162,20 +162,20 @@
         }
     }
 
-    stage('Publish artifacts for report-processing-service') {
-        when {
-            allOf {
-                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-                environment name: 'REPORTPROCESSINGSERVICE', value: 'false'
-            }
-        }
-        steps {
-            echo 'Publish artifacts for report-processing-service'
-            script {
-                dir ('report-service') {
-                    sh 'docker push'
-                }
-            }
-        }
-    }
+    // stage('Publish artifacts for report-processing-service') {
+    //     when {
+    //         allOf {
+    //             environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
+    //             environment name: 'REPORTPROCESSINGSERVICE', value: 'false'
+    //         }
+    //     }
+    //     steps {
+    //         echo 'Publish artifacts for report-processing-service'
+    //         script {
+    //             dir ('report-service') {
+    //                 sh 'docker push'
+    //             }
+    //         }
+    //     }
+    // }
 // }
