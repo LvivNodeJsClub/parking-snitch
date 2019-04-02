@@ -16,12 +16,16 @@ pipeline {
             }
         }
 
-        def tasks = [:]
-        tasks['report-service'] = load 'report-service/Jenkinsfile'
-        tasks['report-processing-service'] = load 'report-processing-service/Jenkinsfile'
+
         stage('Service') {
             steps {
-                parallel tasks
+                script {
+                    def tasks = [:]
+                    tasks['report-service'] = load 'report-service/Jenkinsfile'
+                    tasks['report-processing-service'] = load 'report-processing-service/Jenkinsfile'
+        
+                    parallel tasks
+                }
             }
         }
     }
