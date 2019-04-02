@@ -5,7 +5,7 @@ pipeline {
     agent any
 
     stages {
-        
+
         stage('Init environment variables.') {
             steps {
                 script {
@@ -26,7 +26,14 @@ pipeline {
                     services['Report Processing Service'] = {
                         load 'report-processing-service/Jenkinsfile'
                     }
-                    parallel services
+                    parallel(
+                         stage('Report Service') {
+                            echo "This is branch c"
+                         }
+                         stage('Report Processing Service') {
+                            load 'report-processing-service/Jenkinsfile'
+                         }
+                        )
 
                 }
             }
