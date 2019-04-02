@@ -1,5 +1,6 @@
+/// <reference lib="dom" />
+import request from 'supertest'; // has some issues with see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/12044
 import {app} from './server';
-import request from 'supertest';
 import httpStatusCodes from 'http-status-codes';
 import {Server} from "http";
 
