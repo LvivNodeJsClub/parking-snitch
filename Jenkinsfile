@@ -1,9 +1,9 @@
 #!/usr/bin/env groovy
 
 def services = [:]
-// services['report-service'] = {
-//     load 'report-service/Jenkinsfile'
-// }
+services['report-service'] = {
+    load 'report-service/Jenkinsfile'
+}
 services['report-processing-service'] = {
     load 'report-processing-service/Jenkinsfile'
 }
