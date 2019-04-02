@@ -70,9 +70,10 @@ pipeline {
                     }
                 }
                 stage('Nested 2') {
-                    stages {
-                        load 'report-processing-service/Jenkinsfile'
-                    }
+                    // stages {
+                        def s = load 'report-processing-service/Jenkinsfile'
+                        s.run()
+                    // }
                 }
             }
         }
