@@ -1,8 +1,8 @@
 /*
 * Build `report-processing-service`
 */
-// def run () {
-// stages {
+pipeline {
+stages {
     stage('Init environment variables for report-processing-service') {
         // when {
         //     anyOf {
@@ -180,4 +180,5 @@
     //     }
     // }
 // }
-// }
+}
+}
