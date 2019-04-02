@@ -1,78 +1,74 @@
 /*
- * Build `report-service`
- */
-stages {
-    
-    stage('Init environment variables for report-service') {
-        when {
-            expression {
-                return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
-            }
-        }
-        steps {
-            echo 'Init environment variables for report-service'
+* Build `report-service`
+*/
+stage('Init environment variables for report-service') {
+    when {
+        expression {
+            return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
         }
     }
+    steps {
+        echo 'Init environment variables for report-service'
+    }
+}
 
-    stage('Install and building report-service') {
-        when {
-            expression {
-                return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
-            }
+stage('Install and building report-service') {
+    when {
+        expression {
+            return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
         }
-        steps {
-            script {
-                dir ('report-service') {
-                    sh 'npm ci'
-                    sh 'npm build'
-                }
+    }
+    steps {
+        script {
+            dir ('report-service') {
+                sh 'npm ci'
+                sh 'npm build'
             }
         }
     }
+}
 
-    stage('Testing report-service') {
-        when {
-            expression {
-                return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
-            }
+stage('Testing report-service') {
+    when {
+        expression {
+            return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
         }
-        steps {
-            script {
-                dir ('report-service') {
-                    sh 'npm test'
-                }
+    }
+    steps {
+        script {
+            dir ('report-service') {
+                sh 'npm test'
             }
         }
     }
+}
 
-    stage('Build docker image for report-service') {
-        when {
-            expression {
-                return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
-            }
+stage('Build docker image for report-service') {
+    when {
+        expression {
+            return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
         }
-        steps {
-            script {
-                dir ('report-service') {
-                    sh 'docker build .'
-                }
+    }
+    steps {
+        script {
+            dir ('report-service') {
+                sh 'docker build .'
             }
         }
     }
+}
 
-    stage('Publish artifacts for report-service') {
-        when {
-            expression {
-                return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
-            }
+stage('Publish artifacts for report-service') {
+    when {
+        expression {
+            return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
         }
-        steps {
-            script {
-                dir ('report-service') {
-                    sh 'docker push'
-                }
+    }
+    steps {
+        script {
+            dir ('report-service') {
+                sh 'docker push'
             }
         }
     }
-
 }
