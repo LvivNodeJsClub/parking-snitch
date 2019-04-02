@@ -19,9 +19,9 @@ pipeline {
             steps {
                 script {
                     def tasks = [:]
-                    tasks['report-service'] = {
-                        load 'report-service/Jenkinsfile'
-                    }
+                    // tasks['report-service'] = {
+                    //     load 'report-service/Jenkinsfile'
+                    // }
                     tasks['report-processing-service'] = {
                         load 'report-processing-service/Jenkinsfile'
                     }
