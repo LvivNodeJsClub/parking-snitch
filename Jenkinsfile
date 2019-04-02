@@ -21,10 +21,12 @@ pipeline {
             // withEnv (["BASE_WORKSPACE=${env.WORKSPACE}"]) {
                 parallel(
                     'report-processing-service': {
-                        load 'report-processing-service/Jenkinsfile'
+                        def pipeline = load 'report-processing-service/Jenkinsfile'
+                        pipeline.run()
                     },
                     'report-service': {
-                        load 'report-service/Jenkinsfile'
+                        def pipeline = load 'report-service/Jenkinsfile'
+                        pipeline.run()
                     },
                 )
             }
