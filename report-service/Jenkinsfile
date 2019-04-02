@@ -1,7 +1,7 @@
 /*
 * Build `report-service`
 */
-def run () {
+// def run () {
 // stages {
     stage('Init environment variables for report-service') {
         // when {
@@ -74,4 +74,4 @@ def run () {
             }
         }
     }
-}
+// }
