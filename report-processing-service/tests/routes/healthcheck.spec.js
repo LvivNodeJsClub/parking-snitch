@@ -1,4 +1,4 @@
-const { app } = require('app');
+const {default: app} = require('app');
 const request = require('supertest');
 const httpStatusCodes  = require('http-status-codes');
 
