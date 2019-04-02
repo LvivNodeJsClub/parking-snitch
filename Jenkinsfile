@@ -2,11 +2,11 @@
 
 def services = [:]
 services['report-service'] = {
-    load 'report-service/Jenkinsfile'
-}
+        echo "This is branch a"
+      }
 services['report-processing-service'] = {
-    load 'report-processing-service/Jenkinsfile'
-}
+        echo "This is branch b"
+      }
 
 pipeline {
     
@@ -22,7 +22,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Build services.') {
             parallel services
         }
