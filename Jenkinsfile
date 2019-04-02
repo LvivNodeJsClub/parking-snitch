@@ -19,13 +19,12 @@ pipeline {
             script {
                 def services = [:]
                 services['report-service'] = {
-                        echo "This is branch a"
-                      }
-                services['report-processing-service'] = {
-                        echo "This is branch b"
-                      }
-                  parallel services
+                    echo "This is branch a"
                 }
+                services['report-processing-service'] = {
+                    echo "This is branch b"
+                }
+                parallel services
             }
         }
     }
