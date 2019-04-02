@@ -15,16 +15,41 @@ pipeline {
             }
         }
 
-        stage('Build services.') {
-            script {
-                def services = [:]
-                services['report-service'] = {
-                    echo "This is branch a"
+        stage('Parallel Stage') {
+            parallel {
+                stage('Branch A') {
+                    agent {
+                        label "for-branch-a"
+                    }
+                    steps {
+                        echo "On Branch A"
+                    }
                 }
-                services['report-processing-service'] = {
-                    echo "This is branch b"
+                stage('Branch B') {
+                    agent {
+                        label "for-branch-b"
+                    }
+                    steps {
+                        echo "On Branch B"
+                    }
                 }
-                parallel services
+                stage('Branch C') {
+                    agent {
+                        label "for-branch-c"
+                    }
+                    stages {
+                        stage('Nested 1') {
+                            steps {
+                                echo "In stage Nested 1 within Branch C"
+                            }
+                        }
+                        stage('Nested 2') {
+                            steps {
+                                echo "In stage Nested 2 within Branch C"
+                            }
+                        }
+                    }
+                }
             }
         }
     }
