@@ -2,7 +2,7 @@
 * Build `report-processing-service`
 */
 // pipeline {
-stages {
+// stages {
     stage('Init environment variables for report-processing-service') {
         // when {
         //     anyOf {
@@ -180,5 +180,5 @@ stages {
     //     }
     // }
 // }
-}
+// }
 // }
