@@ -32,7 +32,16 @@ pipeline {
                          }
                          stage('Report Processing Service') {
                             stages {
-    stage('Init environment variables for report-processing-service') {
+    stage('Init environment variables for report-processing-service1') {
+        steps {
+            echo 'Init environment variables for report-processing-service'
+            script {
+                env.REPORTPROCESSINGSERVICE = 'true'
+            }
+        }
+    }
+
+        stage('Init environment variables for report-processing-service2') {
         steps {
             echo 'Init environment variables for report-processing-service'
             script {
