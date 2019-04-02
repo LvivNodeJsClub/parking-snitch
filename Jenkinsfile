@@ -22,10 +22,9 @@ pipeline {
                 }
             }
         }
+        
         stage('Build services.') {
-            steps {
-                parallel services
-            }
+            parallel services
         }
     }
 }
