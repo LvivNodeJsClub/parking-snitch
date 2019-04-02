@@ -18,7 +18,7 @@ export async function init() {
         await rabbitmqProducer.init();
         console.log('RabbitmqProducer connection successful');
 
-        const messageService = new MessageService(rabbitmqProducer);
+        const messageService = new MessageService(rabbitmqProducer, config.reportReadyForProcessingQueue.queueName);
         await rabbitmqConsumer.consumeMessagesFromQueue(config.reportImagesQueue.queueName, PhotosMessageHandler(messageService));
     } catch (error) {
         console.error(error);

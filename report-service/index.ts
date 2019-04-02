@@ -1,5 +1,4 @@
 import config from './config';
-
 import {init} from './init';
 import {app} from './server';
 
