@@ -11,7 +11,6 @@ pipeline {
                     def scmVars = checkout scm
                     env.MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT = scmVars.GIT_PREVIOUS_SUCCESSFUL_COMMIT
                     echo "Building... ${MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT}"
-                    sh 'printenv'
                 }
             }
         }
@@ -24,6 +23,15 @@ pipeline {
                     tasks['report-service'] = load 'report-service/Jenkinsfile'
                     tasks['report-processing-service'] = load 'report-processing-service/Jenkinsfile'
         
+                    tasks['printenv'] = {
+                        stage('Init environment variables.') {
+                            steps {
+                                script {
+                                        sh 'printenv'
+                                    }
+                                }
+                            }
+                        }
                     parallel tasks
                 }
             }
