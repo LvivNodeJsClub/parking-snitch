@@ -15,24 +15,11 @@ pipeline {
             }
         }
 
-        stage('run-parallel-branches') {
-          steps {
-            parallel(
-              a: {
-                echo "This is branch a"
-              },
-              b: {
-                echo "This is branch b"
-              }
-            )
-          }
-        }
-
         stage('Build services.') {
             steps{
                 script {
                     def services = [:]
-                    services['report_service'] = {
+                    services['report-service'] = {
                         echo "This is branch c"
                     }
                     services['report_processing_service'] = {
