@@ -5,7 +5,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Init environment variables.') {
+        stage 'Init environment variables.' {
             steps {
                 script {
                     def scmVars = checkout scm
@@ -15,14 +15,18 @@ pipeline {
             }
         }
 
-        stage('Service') {
+        stage 'Service' {
             steps {
                 script {
                     def tasks = [:]
-                    tasks['report-service'] = load 'report-service/Jenkinsfile'
-                    tasks['report-processing-service'] = load 'report-processing-service/Jenkinsfile'
+                    tasks['report-service'] = {
+                        load 'report-service/Jenkinsfile'
+                    }
+                    tasks['report-processing-service'] = {
+                        load 'report-processing-service/Jenkinsfile'
+                    }
+                    parallel tasks  
                 }
-                parallel tasks
             }
         }
     }
