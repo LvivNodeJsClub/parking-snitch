@@ -15,25 +15,14 @@ pipeline {
             }
         }
 
-
         stage('Service') {
             steps {
                 script {
                     def tasks = [:]
                     tasks['report-service'] = load 'report-service/Jenkinsfile'
                     tasks['report-processing-service'] = load 'report-processing-service/Jenkinsfile'
-        
-                    tasks['printenv'] = {
-                        stage('Init environment variables.') {
-                            steps {
-                                script {
-                                        sh 'printenv'
-                                    }
-                                }
-                            }
-                        }
-                    parallel tasks
                 }
+                parallel tasks
             }
         }
     }
