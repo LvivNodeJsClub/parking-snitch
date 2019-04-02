@@ -23,8 +23,10 @@ pipeline {
             }
         }
 
-        //stage('Build services.') {
-            parallel services
-        //}
+        stage('Build services.') {
+            steps {
+                parallel services
+            }
+        }
     }
 }
