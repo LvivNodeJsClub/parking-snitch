@@ -16,14 +16,17 @@ pipeline {
             }
         }
 
-        parallel(
-            reportprocessingservice: {
-                    load 'report-processing-service/Jenkinsfile'
-                },
-            reportservice: {
-                    load 'report-service/Jenkinsfile'
-                },
-        )
-
+        stage('Service') {
+            steps {
+                parallel(
+                    reportprocessingservice: {
+                            load 'report-processing-service/Jenkinsfile'
+                        },
+                    reportservice: {
+                            load 'report-service/Jenkinsfile'
+                        },
+                )
+            }
+        }
     }
 }
