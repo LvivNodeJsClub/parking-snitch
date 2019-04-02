@@ -56,9 +56,18 @@ pipeline {
         stage('Build services.') {
             parallel {
                 stage('Nested 1') {
-                    steps {
-                        echo "In stage Nested 1 within Branch C"
+                    stages {
+                    stage('Nested 11') {
+                        steps {
+                            echo "In stage Nested 1 within Branch C"
+                        }
                     }
+                     stage('Nested 12') {
+                        steps {
+                            echo "In stage Nested 1 within Branch C"
+                        }
+                    }
+                }
                 }
                 stage('Nested 2') {
                     steps {
