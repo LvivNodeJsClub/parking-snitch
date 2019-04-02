@@ -1,13 +1,5 @@
 #!/usr/bin/env groovy
 
-def services = [:]
-services['report-service'] = {
-        echo "This is branch a"
-      }
-services['report-processing-service'] = {
-        echo "This is branch b"
-      }
-
 pipeline {
     
     agent any
@@ -24,8 +16,16 @@ pipeline {
         }
 
         stage('Build services.') {
-            steps {
-                parallel services
+            script {
+                def services = [:]
+                services['report-service'] = {
+                        echo "This is branch a"
+                      }
+                services['report-processing-service'] = {
+                        echo "This is branch b"
+                      }
+                  parallel services
+                }
             }
         }
     }
