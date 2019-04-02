@@ -71,16 +71,7 @@ pipeline {
                 }
                 stage('Nested 2') {
                     stages {
-                        stage('Nested 21') {
-                            steps {
-                                echo "In stage Nested 1 within Branch C"
-                            }
-                        }
-                         stage('Nested 22') {
-                            steps {
-                                echo "In stage Nested 1 within Branch C"
-                            }
-                        }
+                        load 'report-processing-service/Jenkinsfile'
                     }
                 }
             }

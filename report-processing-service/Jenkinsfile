@@ -2,8 +2,8 @@
 // * Build `report-processing-service`
 // */
 
-                stage('Nested 2') {
-                    stages {
+                // stage('Nested 2') {
+                    // stages {
                         stage('Nested 21') {
                             steps {
                                 echo "In stage Nested 1 within Branch C"
@@ -13,9 +13,9 @@
                             steps {
                                 echo "In stage Nested 1 within Branch C"
                             }
-                        }
+                        // }
                     }
-                }
+                // }
 
 
 
