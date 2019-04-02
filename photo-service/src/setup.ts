@@ -16,5 +16,3 @@ export default () => Promise.all([
         messageService: new MessageService(rabbitmqProducer),
         photoService: new PhotoService(StorageTypes.FILE),
     }));
-
-
