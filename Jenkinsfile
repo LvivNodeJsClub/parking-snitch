@@ -1,5 +1,13 @@
 #!/usr/bin/env groovy
 
+def services = [:]
+// services['report-service'] = {
+//     load 'report-service/Jenkinsfile'
+// }
+services['report-processing-service'] = {
+    load 'report-processing-service/Jenkinsfile'
+}
+
 pipeline {
     
     agent any
@@ -15,19 +23,6 @@ pipeline {
             }
         }
 
-        // stage('Service') {
-        //     steps {
-        //         script {
-                    def tasks = [:]
-                    // tasks['report-service'] = {
-                    //     load 'report-service/Jenkinsfile'
-                    // }
-                    tasks['report-processing-service'] = {
-                        load 'report-processing-service/Jenkinsfile'
-                    }
-                    parallel tasks  
-        //         }
-        //     }
-        // }
+        parallel services
     }
 }
