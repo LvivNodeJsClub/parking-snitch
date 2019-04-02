@@ -4,13 +4,13 @@ import mongoose from 'mongoose';
 import router from './routes';
 import errorHandler from './errorHandler';
 import RabbitmqConsumer from "./queueConsumer/rabbitmqConsumer";
-import {photosMessageHandler} from "./handlers";
+import {PhotosMessageHandler} from "./handlers";
+import RabbitmqProducer from './queueProducer/rabbitmqProducer';
+import config from './config';
+import MessageService from './service/messageService';
 
-const {PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, QUEUE_HOST, QUEUE_USER, QUEUE_PASSWORD, IMAGES_QUEUE_NAME} = process.env;
-
+const {PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME} = process.env;
 const DB_PORT = process.env.DB_PORT || 27017;
-const QUEUE_PORT = process.env.QUEUE_PORT || 5672;
-
 
 init().then(() => {
     const app = new Koa();
@@ -34,11 +34,16 @@ async function init() {
         });
         console.log('Database connection successful');
 
-        const rabbitmqConsumer = new RabbitmqConsumer(`amqp://${QUEUE_HOST}:${QUEUE_PORT}/`);
+        const rabbitmqConsumer = new RabbitmqConsumer(config.reportImagesQueue.connection);
         await rabbitmqConsumer.init();
-        console.log('Rabbitmq connection successful');
+        console.log('RabbitmqConsumer connection successful');
 
-        await rabbitmqConsumer.consumeMessagesFromQueue(IMAGES_QUEUE_NAME || "", photosMessageHandler);
+        const rabbitmqProducer = new RabbitmqProducer(config.reportReadyForProcessingQueue.connection);
+        await rabbitmqProducer.init()
+        console.log('RabbitmqProducer connection successful');
+
+        const messageService = new MessageService(rabbitmqProducer);
+        await rabbitmqConsumer.consumeMessagesFromQueue(config.reportImagesQueue.queueName, PhotosMessageHandler(messageService));
     } catch (error) {
         console.error(error);
         process.exit(1);
