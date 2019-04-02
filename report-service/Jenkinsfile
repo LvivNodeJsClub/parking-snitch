@@ -1,7 +1,7 @@
 /*
 * Build `report-service`
 */
-stages {
+// stages {
     stage('Init environment variables for report-service') {
         when {
             expression {
@@ -73,4 +73,4 @@ stages {
             }
         }
     }
-}
+// }
