@@ -9,9 +9,6 @@ import RabbitmqProducer from './queueProducer/rabbitmqProducer';
 import config from './config';
 import MessageService from './service/messageService';
 
-const {PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME} = process.env;
-const DB_PORT = process.env.DB_PORT || 27017;
-
 init().then(() => {
     const app = new Koa();
 
@@ -21,17 +18,12 @@ init().then(() => {
         .use(router.routes())
         .use(router.allowedMethods());
 
-    app.listen(PORT, () => console.log(`Listening port ${PORT}`));
+    app.listen(config.listenPort, () => console.log(`Listening port ${config.listenPort}`));
 });
 
 async function init() {
     try {
-        await mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/`, { 
-            useNewUrlParser: true,
-            user: DB_USER, 
-            pass: DB_PASSWORD, 
-            dbName: DB_NAME,
-        });
+        await mongoose.connect(config.monogo.connection, config.monogo.options);
         console.log('Database connection successful');
 
         const rabbitmqConsumer = new RabbitmqConsumer(config.reportImagesQueue.connection);
@@ -39,7 +31,7 @@ async function init() {
         console.log('RabbitmqConsumer connection successful');
 
         const rabbitmqProducer = new RabbitmqProducer(config.reportReadyForProcessingQueue.connection);
-        await rabbitmqProducer.init()
+        await rabbitmqProducer.init();
         console.log('RabbitmqProducer connection successful');
 
         const messageService = new MessageService(rabbitmqProducer);

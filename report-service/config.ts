@@ -1,18 +1,42 @@
+const {
+    PORT,
+    // mongo
+    DB_HOST = '127.0.0.1',
+    DB_PORT = 27017,
+    DB_USER,
+    DB_PASSWORD,
+    DB_NAME,
+
+    // output queue
+    REPORT_QUEUE_HOST = '127.0.0.1',
+    REPORT_QUEUE_PORT = 5672,
+    REPORT_QUEUE_NAME = 'report_ready_for_processing_queue',
+
+    // input queue
+    QUEUE_HOST = '127.0.0.1',
+    QUEUE_PORT = 5672,
+    IMAGES_QUEUE_NAME = ''
+} = process.env;
 
 const config = {
+    listenPort: PORT,
+    monogo: {
+        connection: `mongodb://${DB_HOST}:${DB_PORT}/`,
+        options: {
+            useNewUrlParser: true,
+            user: DB_USER,
+            pass: DB_PASSWORD,
+            dbName: DB_NAME,
+        }
+    },
     reportReadyForProcessingQueue: {
-        host: process.env.REPORT_QUEUE_HOST || "127.0.0.1",
-        port: process.env.REPORT_QUEUE_PORT || 5672,
-        queueName: process.env.REPORT_QUEUE_NAME || "report_ready_for_processing_queue",
-        connection: "",
+        queueName: REPORT_QUEUE_NAME,
+        connection: `amqp://${REPORT_QUEUE_HOST}:${REPORT_QUEUE_PORT}`,
     },
     reportImagesQueue: {
-        host: process.env.QUEUE_HOST || "127.0.0.1",
-        port: process.env.QUEUE_PORT || 5672,
-        queueName: process.env.IMAGES_QUEUE_NAME || '',
-        connection: '',
+        queueName: IMAGES_QUEUE_NAME,
+        connection: `amqp://${QUEUE_HOST}:${QUEUE_PORT}/`,
     }
 };
-config.reportImagesQueue.connection = `amqp://${config.reportImagesQueue.host}:${config.reportImagesQueue.port}/`;
-config.reportReadyForProcessingQueue.connection = `amqp://${config.reportReadyForProcessingQueue.host}:${config.reportReadyForProcessingQueue.port}`;
+
 export default config;
