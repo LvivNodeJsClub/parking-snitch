@@ -31,7 +31,16 @@ pipeline {
                             echo "This is branch c"
                          }
                          stage('Report Processing Service') {
-                            load 'report-processing-service/Jenkinsfile'
+                            stages {
+    stage('Init environment variables for report-processing-service') {
+        steps {
+            echo 'Init environment variables for report-processing-service'
+            script {
+                env.REPORTPROCESSINGSERVICE = 'true'
+            }
+        }
+    }
+}
                          }
                         )
 
