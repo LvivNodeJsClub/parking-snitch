@@ -69,7 +69,9 @@ pipeline {
                         }
                     }
                 }
-                load 'report-processing-service/Jenkinsfile'
+                stage('Nested 2') {
+                    load 'report-processing-service/Jenkinsfile'
+                }
             }
         }
     }
