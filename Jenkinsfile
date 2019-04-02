@@ -70,7 +70,7 @@ pipeline {
                     }
                 }
                 stage('Nested 2') {
-                    stages {
+                    steps {
                         build job: 'report-processing-service'
                     }
                 }
