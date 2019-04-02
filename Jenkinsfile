@@ -5,7 +5,7 @@ pipeline {
     agent any
 
     stages {
-        stage 'Init environment variables.' {
+        stage('Init environment variables.') {
             steps {
                 script {
                     def scmVars = checkout scm
@@ -15,7 +15,7 @@ pipeline {
             }
         }
 
-        stage 'Service' {
+        stage('Service') {
             steps {
                 script {
                     def tasks = [:]
