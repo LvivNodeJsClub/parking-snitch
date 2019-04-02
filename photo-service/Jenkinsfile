@@ -1,0 +1,74 @@
+/*
+ * Build `photo-service`
+ */
+stage('Init environment variables for photo-service') {
+    when {
+        expression {
+            return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^photo-service'")
+        }
+    }
+    steps {
+        echo 'Init environment variables for photo-service'
+    }
+}
+
+stage('Install and building photo-service') {
+    when {
+        expression {
+            return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^photo-service'")
+        }
+    }
+    steps {
+        script {
+            dir ('photo-service') {
+                sh 'npm ci'
+                sh 'npm build'
+            }
+        }
+    }
+}
+
+stage('Testing photo-service') {
+    when {
+        expression {
+            return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^photo-service'")
+        }
+    }
+    steps {
+        script {
+            dir ('photo-service') {
+                sh 'npm test'
+            }
+        }
+    }
+}
+
+stage('Build docker image for photo-service') {
+    when {
+        expression {
+            return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^photo-service'")
+        }
+    }
+    steps {
+        script {
+            dir ('photo-service') {
+                sh 'docker build .'
+            }
+        }
+    }
+}
+
+stage('Publish artifacts for photo-service') {
+    when {
+        expression {
+            return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^photo-service'")
+        }
+    }
+    steps {
+        script {
+            dir ('photo-service') {
+                sh 'docker push'
+            }
+        }
+    }
+}
