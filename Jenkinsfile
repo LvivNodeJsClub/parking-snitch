@@ -17,17 +17,15 @@ pipeline {
         }
 
         stage('Service') {
-            steps {
-                withEnv (["BASE_WORKSPACE=${env.WORKSPACE}"]) {
-                    parallel(
-                        reportprocessingservice: {
-                            load 'report-processing-service/Jenkinsfile'
-                        },
-                        reportservice: {
-                            load 'report-service/Jenkinsfile'
-                        },
-                    )
-                }
+            withEnv (["BASE_WORKSPACE=${env.WORKSPACE}"]) {
+                parallel(
+                    'report-processing-service': {
+                        load 'report-processing-service/Jenkinsfile'
+                    },
+                    'report-service': {
+                        load 'report-service/Jenkinsfile'
+                    },
+                )
             }
         }
     }
