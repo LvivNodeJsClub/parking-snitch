@@ -1,7 +1,7 @@
 version: "3.4"
 
 services:
- 
+
   report-processing-db-host:
     image: mongo:4.0-xenial
     ports:
@@ -206,6 +206,12 @@ services:
       # QUEUE_USER: report-service-queue-user
       # QUEUE_PASSWORD: ${PHOTO_SERVICE_QUEUE_PASS}
       REPORT_QUEUE_HOST: report-queue-host
+    healthcheck:
+      test: curl -f http://localhost:3000/healthcheck || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   # photo-storage:
