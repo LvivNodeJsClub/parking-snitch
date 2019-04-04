@@ -1,21 +1,11 @@
 import config from "../config";
-import logger from "../logger";
-import IQueueProducer from "../queueProducer/IQueueProducer";
 import IMessageToUploadPhotos from "../queueProducer/IMessageToUploadPhotos";
-import RabbitmqProducer from "../queueProducer/rabbitmqProducer";
+import IQueueProducer from "../queueProducer/IQueueProducer";
 
 export default class MessageService {
-    private readonly rabbitmqProducer: IQueueProducer;
-
-    constructor() {
-        this.rabbitmqProducer = new RabbitmqProducer(config.queue.connection);
-        this.rabbitmqProducer.init().catch(error => {
-            logger.error(error);
-            process.exit(1);
-        });
-    }
+    constructor(private queueProducer: IQueueProducer) {}
 
     public async notify(message: IMessageToUploadPhotos): Promise<boolean> {
-        return this.rabbitmqProducer.sendMessageToQueue(config.queue.imagesQueueName, message);
+        return this.queueProducer.sendMessageToQueue(config.queue.imagesQueueName, message);
     }
 }
