@@ -1,6 +1,8 @@
 .env
 dist
 
+src/routes/routes.ts
+
 test-coverage/
 test-report/
 spec-coverage/

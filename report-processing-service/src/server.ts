@@ -14,10 +14,10 @@ const reportReadyHandler = new ReportReadyHandler(reportClient, inspectorClient,
 const consumer = new ReportReadyForProcessingMessageConsumer(config.reportReadyForProcessingQueue.connection);
 
 export default consumer.init()
-    .then(() => {
-        const queueName = config.reportReadyForProcessingQueue.queueName;
-        return consumer.consumeMessagesFromQueue(queueName, reportReadyHandler.handler);
-    })
-    .then(() => {
-        return app;
-    });
+  .then(() => {
+    const queueName = config.reportReadyForProcessingQueue.queueName;
+    return consumer.consumeMessagesFromQueue(queueName, reportReadyHandler.handler);
+  })
+  .then(() => {
+    return app;
+  });
