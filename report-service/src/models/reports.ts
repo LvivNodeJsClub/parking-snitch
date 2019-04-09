@@ -31,4 +31,23 @@ const reportSchema = new Schema({
     timestamps: true
 });
 
+export interface ILocation {
+    lat: number,
+    lon: number,
+}
+
+export interface IComment {
+    body: string,
+    date: Date,
+}
+
+export interface IReport {
+    userId?: string,
+    description?: string,
+    location: ILocation,
+    photoIds?: string[],
+    status?: Statuses,
+    comments?: IComment[],
+}
+
 export default mongoose.model('Report', reportSchema);
