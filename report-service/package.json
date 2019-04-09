@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "tsc -p .",
-    "generate-routes": "tsoa routes",
-    "generate-swagger": "tsoa swagger",
+    "build": "npm run generate && tsc -p . && cp ./src/swagger.yaml ./dist/",
+    "generate": "tsoa routes && tsoa swagger",
     "build:live": "nodemon --require dotenv/config --watch \"**/*.ts\" --exec \"ts-node\" src/index.ts",
     "test": "jest --config=./jest.config.js"
   },
