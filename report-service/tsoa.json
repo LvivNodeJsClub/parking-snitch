@@ -1,7 +1,8 @@
 {
   "swagger": {
     "entryFile": "./src/index.ts",
-    "outputDirectory": "./dist/doc"
+    "outputDirectory": "./",
+    "yaml": true
   },
   "routes": {
     "entryFile": "./src/index.ts",

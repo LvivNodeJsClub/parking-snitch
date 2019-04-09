@@ -7,7 +7,7 @@ import {Body, Controller, Delete, Get, Patch, Post, Route, SuccessResponse} from
 @Route('reports')
 export class ReportsController extends Controller {
     @Get('{id}')
-    public async getReportById(id: number): Promise<any> {
+    public async getReportById(id: string): Promise<any> {
         const report = await ReportModel.findById(id);
         if (!report) {
             throw new NotFoundError(`Report with ID ${id} was not found`);
@@ -33,7 +33,7 @@ export class ReportsController extends Controller {
     }
 
     @Patch('{id}')
-    public async modifyReport(id: number, @Body() requestBody: any): Promise<any> {
+    public async modifyReport(id: string, @Body() requestBody: any): Promise<any> {
         if (!requestBody) {
             throw new BadRequestError();
         }
@@ -43,7 +43,7 @@ export class ReportsController extends Controller {
     }
 
     @Delete('{id}')
-    public async deleteReport(id: number): Promise<any> {
+    public async deleteReport(id: string): Promise<any> {
         await ReportModel.findOneAndUpdate({'_id': id}, {status: Statuses.CANCELED});
         this.setStatus(HttpStatus.NO_CONTENT)
     }

@@ -2,3 +2,4 @@
 !jest.config.js
 .env
 dist
+src/routes/routes.ts

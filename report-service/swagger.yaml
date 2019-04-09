@@ -1,0 +1,97 @@
+basePath: /
+consumes:
+    - application/json
+definitions: {}
+info:
+    title: report-service
+    version: 1.0.0
+    license:
+        name: ISC
+paths:
+    '/reports/{id}':
+        get:
+            operationId: GetReportById
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: Ok
+                    schema:
+                        type: object
+            security: []
+            parameters:
+                -
+                    in: path
+                    name: id
+                    required: true
+                    type: string
+        patch:
+            operationId: ModifyReport
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: Ok
+                    schema:
+                        type: object
+            security: []
+            parameters:
+                -
+                    in: path
+                    name: id
+                    required: true
+                    type: string
+                -
+                    in: body
+                    name: requestBody
+                    required: true
+                    schema:
+                        type: object
+        delete:
+            operationId: DeleteReport
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: Ok
+                    schema:
+                        type: object
+            security: []
+            parameters:
+                -
+                    in: path
+                    name: id
+                    required: true
+                    type: string
+    /reports:
+        post:
+            operationId: CreateNewReport
+            produces:
+                - application/json
+            responses:
+                '201':
+                    description: Created
+                    schema:
+                        type: object
+            security: []
+            parameters:
+                -
+                    in: body
+                    name: requestBody
+                    required: true
+                    schema:
+                        type: object
+    /healthcheck:
+        get:
+            operationId: GetHealthCheck
+            produces:
+                - application/json
+            responses:
+                '204':
+                    description: 'No content'
+            security: []
+            parameters: []
+produces:
+    - application/json
+swagger: '2.0'
+securityDefinitions: {}
