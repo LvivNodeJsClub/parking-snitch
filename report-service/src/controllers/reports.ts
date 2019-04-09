@@ -1,43 +1,51 @@
-import {Context} from "koa";
 import HttpStatus from 'http-status-codes';
 import {NotFoundError, BadRequestError} from '../errorHandler/customErrors';
 import ReportModel, {Statuses} from "../models/reports";
 import {validateUpdateReport, validateCreateNewReport} from "../validators/reports";
+import {Body, Controller, Delete, Get, Patch, Post, Route, SuccessResponse} from "tsoa";
 
-
-export const getReportById = async (ctx: Context) => {
-    const report = await ReportModel.findById(ctx.params.id);
-    if (!report) {
-        throw new NotFoundError(`Report with ID ${ctx.params.id} was not found`);
-    }
-    ctx.body = report;
-};
-
-export const createNewReport = async (ctx: Context) => {
-    if (!ctx.request.body) {
-        throw new BadRequestError();
+@Route('reports')
+export class ReportsController extends Controller {
+    @Get('{id}')
+    public async getReportById(id: number): Promise<any> {
+        const report = await ReportModel.findById(id);
+        if (!report) {
+            throw new NotFoundError(`Report with ID ${id} was not found`);
+        }
+        return report;
     }
 
-    const query = {
-        userId: '1', // TODO: use real userId when we implement Users support
-        ...validateCreateNewReport(ctx.request.body),
-    };
-    const report = new ReportModel(query);
-    await report.save();
+    @SuccessResponse('201', 'Created') // Custom success response
+    @Post()
+    public async createNewReport(@Body() requestBody: any): Promise<any> {
+        if (!requestBody) {
+            throw new BadRequestError();
+        }
 
-    ctx.body = report;
-};
+        const query = {
+            userId: '1', // TODO: use real userId when we implement Users support
+            ...validateCreateNewReport(requestBody),
+        };
+        const report = new ReportModel(query);
+        await report.save();
 
-export const modifyReport = async (ctx: Context) => {
-    if (!ctx.request.body) {
-        throw new BadRequestError();
+        return report;
     }
 
-    const query = validateUpdateReport(ctx.request.body);
-    ctx.body = await ReportModel.findOneAndUpdate({'_id': ctx.params.id}, query, {new: true});
-};
+    @Patch('{id}')
+    public async modifyReport(id: number, @Body() requestBody: any): Promise<any> {
+        if (!requestBody) {
+            throw new BadRequestError();
+        }
 
-export const deleteReport = async (ctx: Context) => {
-    await ReportModel.findOneAndUpdate({'_id': ctx.params.id}, {status: Statuses.CANCELED});
-    ctx.response.status = HttpStatus.NO_CONTENT;
-};
+        const query = validateUpdateReport(requestBody);
+        return ReportModel.findOneAndUpdate({'_id': id}, query, {new: true});
+    }
+
+    @Delete('{id}')
+    public async deleteReport(id: number): Promise<any> {
+        await ReportModel.findOneAndUpdate({'_id': id}, {status: Statuses.CANCELED});
+        this.setStatus(HttpStatus.NO_CONTENT)
+    }
+
+}

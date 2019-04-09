@@ -1,6 +1,10 @@
-import httpStatusCodes from 'http-status-codes';
-import {Context} from 'koa';
+import {Get, Route, Controller } from 'tsoa';
+import httpStatusCodes from "http-status-codes";
 
-export const healthcheck = async (ctx: Context) => {
-  ctx.status = httpStatusCodes.OK;
-};
+@Route('healthcheck')
+export class HealthCheckController extends Controller {
+    @Get('')
+    public async getHealthCheck(): Promise<void> {
+        this.setStatus(httpStatusCodes.OK);
+    }
+}

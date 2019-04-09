@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc -p .",
-    "build:live": "nodemon --require dotenv/config --watch \"**/*.ts\" --exec \"ts-node\" index.ts",
+    "generate-routes": "tsoa routes",
+    "generate-swagger": "tsoa swagger",
+    "build:live": "nodemon --require dotenv/config --watch \"**/*.ts\" --exec \"ts-node\" src/index.ts",
     "test": "jest --config=./jest.config.js"
   },
   "keywords": [],
@@ -30,6 +32,7 @@
     "ts-jest": "^24.0.1",
     "ts-node": "^7.0.1",
     "tslint": "^5.15.0",
+    "tsoa": "^2.3.81",
     "typescript": "^3.1.3"
   },
   "dependencies": {
