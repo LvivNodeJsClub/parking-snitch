@@ -12,14 +12,6 @@ describe('Healthcheck', () => {
         res           = {sendStatus: sendStatusSpy};
     });
 
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
-
-    afterAll(() => {
-        jest.restoreAllMocks();
-    });
-
     test('Healthcheck should return 200 OK', async () => {
         await healthcheck(req, res);
 

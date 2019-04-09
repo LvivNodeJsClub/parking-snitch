@@ -5,6 +5,6 @@ import healthCheck from './healthcheck';
 const router = Router();
 
 router.use('/inspectors', inspectorsRouter);
-router.use('/', healthCheck);
+router.use('/healthcheck', healthCheck);
 
 export default router;

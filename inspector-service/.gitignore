@@ -1,4 +1,4 @@
-dist/*.js
+!tests/*.js
 .env
 dist
 test-report
