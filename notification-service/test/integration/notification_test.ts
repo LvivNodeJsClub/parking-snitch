@@ -15,9 +15,8 @@ describe('Notification integration test', function () {
     let server: Server;
 
     before(async function () {
-        await init().then(async () => {
-            server = await app.listen(PORT);
-        });
+        await init();
+        server = await app.listen(PORT);
     });
 
     afterEach(async function () {

@@ -8,6 +8,8 @@ const app = new Koa();
 app.use(bodyParser());
 
 app.use(notificationRoutes.routes());
+app.use(notificationRoutes.allowedMethods());
 app.use(healthcheckRoutes.routes());
+app.use(healthcheckRoutes.allowedMethods());
 
 export default app;
