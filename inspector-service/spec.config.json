@@ -1,0 +1,19 @@
+{
+  "name": "inspector-service",
+  "roots": ["<rootDir>/tests", "<rootDir>/dist"],
+  "modulePaths": ["<rootDir>/dist"],
+  "testMatch": ["**\/*.spec.js"],
+  "reporters": [
+    "default",
+    [ "jest-junit", { 
+      "outputDirectory": "./spec-report" 
+    }],
+    ["jest-html-reporter", {
+      "outputPath": "spec-report/index.html"
+    }]
+  ],
+  "collectCoverage": true,
+  "coverageReporters": ["json", "html"],
+  "coverageDirectory": "./spec-coverage",
+  "testEnvironment": "node"
+}

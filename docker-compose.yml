@@ -1,4 +1,4 @@
-version: "3"
+version: "3.4"
 
 services:
 
@@ -39,6 +39,12 @@ services:
       REPORT_QUEUE_HOST: report-queue-host
       # QUEUE_USER: report-service-queue-user
       # QUEUE_PASSWORD: ${REPORT_SERVICE_QUEUE_PASS}
+    healthcheck:
+      test: curl -f http://localhost:3000/healthcheck || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   notification-db-host:
     image: mongo:4.0-xenial
@@ -156,6 +162,12 @@ services:
       # QUEUE_USER: photo-service-queue-user
       # QUEUE_PASSWORD: ${PHOTO_SERVICE_QUEUE_PASS}
       FILE_PATH: storage
+    healthcheck:
+      test: curl -f http://localhost:3000/healthcheck || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   report-db-host:
     image: mongo:3.4
@@ -206,6 +218,12 @@ services:
       # QUEUE_USER: report-service-queue-user
       # QUEUE_PASSWORD: ${PHOTO_SERVICE_QUEUE_PASS}
       REPORT_QUEUE_HOST: report-queue-host
+    healthcheck:
+      test: curl -f http://localhost:3000/healthcheck || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   # photo-storage:

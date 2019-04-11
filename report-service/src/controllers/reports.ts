@@ -19,7 +19,7 @@ export const createNewReport = async (ctx: Context) => {
     }
 
     const query = {
-        userId: '1',
+        userId: '1', // TODO: use real userId when we implement Users support
         ...validateCreateNewReport(ctx.request.body),
     };
     const report = new ReportModel(query);

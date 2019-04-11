@@ -11,7 +11,7 @@ export default class RabbitmqProducer implements IQueueProducer {
 
     async init() {
         if (this.initialized) {
-            throw new Error("The RabbitmqProducer instance already initialised");
+            throw new Error("The RabbitmqProducer instance is already initialised");
         }
 
         this.connection = await connect(this.url);
