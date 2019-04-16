@@ -1,0 +1,12 @@
+{
+  "swagger" : {
+    "outputDirectory": "./dist",
+    "entryFile": "./src/app.ts"
+  },
+  "routes": {
+    "basePath": "/",
+    "middleware": "koa",
+    "entryFile": "./src/routes/tsoa.ts",
+    "routesDir": "./src/routes"
+  }
+}

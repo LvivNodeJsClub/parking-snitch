@@ -1,7 +1,13 @@
-import healthcheck from './routes/healthcheck';
 import Koa from 'koa';
+import config from './config';
+import router from './routes';
+import {swaggerRouter} from './routes/swagger';
 
 const app = new Koa();
-app.use(healthcheck.routes());
+
+app
+  .use(router.routes())
+  .use(router.allowedMethods())
+  .use(swaggerRouter(config.baseUrl));
 
 export default app;
