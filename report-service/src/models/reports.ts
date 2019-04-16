@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, {Document, Model} from "mongoose";
 const Schema = mongoose.Schema;
 
 export enum Statuses {
@@ -9,7 +9,7 @@ export enum Statuses {
     DONE = "Done",
 }
 
-const reportSchema = new Schema({
+const ReportSchema = new Schema({
     userId: String,
     description: String,
     location: {
@@ -50,4 +50,6 @@ export interface IReport {
     comments?: IComment[],
 }
 
-export default mongoose.model('Report', reportSchema);
+interface ReportModel extends Document, IReport {}
+
+export const Report: Model<ReportModel> = mongoose.model<ReportModel>('Report', ReportSchema);
