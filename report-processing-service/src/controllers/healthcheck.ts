@@ -4,7 +4,7 @@ import {Context} from 'koa';
 
 @Route('/healthcheck')
 export class HealthcheckController extends Controller {
-  
+
   @Get()
   public async get() {
     this.setStatus(httpStatusCodes.OK);

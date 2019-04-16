@@ -7,7 +7,7 @@ export const swaggerRouter = (baseUrl: string) => {
     swaggerOptions: {
       url: `${baseUrl}/swagger.json`,
     },
-  }
+  };
 
   return koaSwagger(swaggerConfig);
-}
+};
