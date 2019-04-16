@@ -21,7 +21,7 @@ describe('Swagger', function () {
     test('should exit with statuscode 200', async function () {
       await request(server)
         .get('/swagger.json')
-        .expect('Content-Type', /octet-stream/)
+        .expect('Content-Type', /json/)
         .expect(httpStatusCodes.OK);
     })
   })
