@@ -1,12 +1,13 @@
 import request from 'supertest';
 import 'mocha';
-import {expect} from 'chai';
-import app from '../../src/app';
-import {Server} from "http";
+import { expect } from 'chai';
+import { Server } from "http";
 import HttpStatusCodes from 'http-status-codes';
 import mongoose from 'mongoose';
-import {Notification, NotificationModel} from '../../src/models/notification';
-import {NotificationResponse} from "../../src/controllers/notification";
+import app from '../../src/app';
+import { init } from '../../src/init';
+import { Notification, NotificationModel } from '../../src/models/notification';
+import { NotificationResponse } from "../../src/controllers/notification";
 
 describe('Notification integration test', function () {
     const PORT = 3000;
@@ -14,7 +15,8 @@ describe('Notification integration test', function () {
     let server: Server;
 
     before(async function () {
-        server = app.listen(PORT);
+        await init();
+        server = await app.listen(PORT);
     });
 
     afterEach(async function () {
@@ -22,7 +24,7 @@ describe('Notification integration test', function () {
     });
 
     after(async function () {
-        server.close();
+        await server.close();
         await mongoose.connection.close();
     });
 
