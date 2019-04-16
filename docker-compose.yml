@@ -77,6 +77,12 @@ services:
       DB_NAME: notification-service-db
       DB_USER: notification-service-db-user
       DB_PASSWORD: ${NOTIFICSTION_SERVICE_DB_PASS}
+    healthcheck:
+      test: curl -f http://localhost:3000/healthcheck || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   inspector-db-host:
     image: mongo:3.4
