@@ -1,6 +1,6 @@
 import {LazyGetter} from 'lazy-get-decorator';
 import path from 'path';
-import logger from "../logger";
+import logger from '../logger';
 import fs from 'fs';
 
 export default class SwaggerService {
