@@ -2,6 +2,7 @@
 dist
 
 src/routes/routes.ts
+*.log
 
 test-coverage/
 test-report/

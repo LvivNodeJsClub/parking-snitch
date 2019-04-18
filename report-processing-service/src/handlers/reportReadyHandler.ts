@@ -1,3 +1,4 @@
+import logger from "../logger";
 import InspectorClient from '../services/inspectorClient';
 import NotificationClient from '../services/notificationClient';
 import ReportClient from '../services/reportClient';
@@ -9,13 +10,13 @@ export default class ReportReadyHandler {
     }
 
     public handler = async (reportId: string) => {
-        console.log(`reportId: ${reportId}`);
+        logger.info(`reportId: ${reportId}`);
 
         const reportInfo = await this.reportClient.getReportById(reportId);
-        console.log(`reportInfo: ${JSON.stringify(reportInfo)}`);
+        logger.info(`reportInfo: ${JSON.stringify(reportInfo)}`);
         const inspectorInfo = await this.inspectorClient.getNearest(reportInfo.location);
-        console.log(`inspectorInfo: ${JSON.stringify(inspectorInfo)}`);
+        logger.info(`inspectorInfo: ${JSON.stringify(inspectorInfo)}`);
         const notificationInfo = await this.notificationClient.notify(reportInfo._id, inspectorInfo._id);
-        console.log(`notificationInfo: ${JSON.stringify(notificationInfo)}`);
+        logger.info(`notificationInfo: ${JSON.stringify(notificationInfo)}`);
     }
 }
