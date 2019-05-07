@@ -1,5 +1,5 @@
 import config from './config';
-import logger from "./logger";
+import logger from './logger';
 import server from './server';
 import Koa from 'koa';
 
