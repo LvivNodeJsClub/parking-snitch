@@ -1,4 +1,4 @@
-import logger from "../logger";
+import logger from '../logger';
 import InspectorClient from '../services/inspectorClient';
 import NotificationClient from '../services/notificationClient';
 import ReportClient from '../services/reportClient';
