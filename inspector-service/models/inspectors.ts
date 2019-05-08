@@ -2,16 +2,19 @@ import mongoose, {Document, Model} from "mongoose";
 
 const {Schema} = mongoose;
 
-interface Location {
+interface GeoLocation {
     lat: number
     lon: number
 }
 
-export interface InspectorModel extends Document {
-    location: Location
-    _id: string
+export interface IInspectorModel{
+    location: GeoLocation
     name: string
     email: string
+    deleted?: boolean
+}
+
+interface InspectorModel extends IInspectorModel, Document {
 }
 
 const inspectorSchema = new Schema({
