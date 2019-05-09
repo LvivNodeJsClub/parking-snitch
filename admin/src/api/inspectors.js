@@ -8,8 +8,9 @@ const inspectorsFetch = axios.create({
  * Get all inspectors
  * @return {AxiosPromise<AxiosResponse>}
  */
-export function getAllInspectors() {
-    return inspectorsFetch.get('/inspectors');
+export async function getAllInspectors() {
+    const {data} = await inspectorsFetch.get('/inspectors');
+    return data;
 }
 
 /**

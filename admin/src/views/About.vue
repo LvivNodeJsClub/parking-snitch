@@ -15,13 +15,10 @@
 
 <script>
     import { mapGetters, mapActions, mapState } from 'vuex'
-    import HelloWorld from '@/components/HelloWorld.vue'
 
     export default {
-        name: 'home',
-        components: {
-            HelloWorld
-        },
+        name: 'About',
+        components: {},
         computed: {
             ...mapState({
                 count: ({counter}) => counter.count,
