@@ -8,9 +8,8 @@ const inspectorsFetch = axios.create({
  * Get all inspectors
  * @return {AxiosPromise<AxiosResponse>}
  */
-export async function getAllInspectors() {
-    const {data} = await inspectorsFetch.get('/inspectors');
-    return data;
+export function getAllInspectors() {
+    return inspectorsFetch.get('/inspectors');
 }
 
 /**
@@ -33,4 +32,34 @@ export function getNearestInspector(lat, lon) {
 export function addInspector(body) {
     return inspectorsFetch.post('/inspectors', body);
 }
+
+/**
+ * Get inspector by ID
+ * @param {String} id - Inspector ID
+ * @return {AxiosPromise<AxiosResponse>}
+ */
+export function getInspectorById(id) {
+    return inspectorsFetch.get(`/inspectors/${id}`);
+}
+
+/**
+ * Update inspector data
+ * @param {String} id - Inspector ID
+ * @param {Object} body - Body data
+ * @return {AxiosPromise<AxiosResponse>}
+ */
+export function updateInspector(id, body) {
+    return inspectorsFetch.patch(`/inspectors/${id}`, body);
+}
+
+/**
+ * Delete inspector
+ * @param {String} id - Inspector ID
+ * @return {AxiosPromise<AxiosResponse>}
+ */
+export function deleteInspector(id) {
+    return inspectorsFetch.delete(`/inspectors/${id}`);
+}
+
+
 

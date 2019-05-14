@@ -18,31 +18,24 @@
 </template>
 
 <script>
-    import { mapGetters, mapState } from 'vuex'
-    import {getAllInspectors} from '@/api/inspectors'
+    import { mapState, mapActions } from 'vuex'
+    //import { getAllInspectors } from '@/api/inspectors'
 
     export default {
         name: 'Inspectors',
-        data() {
-            return {
-                inspectors: [],
-            }
-        },
-        async mounted() {
-            this.inspectors = await getAllInspectors();
+
+        mounted() {
+            this.getInspectors();
         },
         computed: {
             ...mapState({
-                count: ({counter}) => counter.count,
-            }),
-            ...mapGetters('counter', {
-                evenOrOdd: 'evenOrOdd',
+                inspectors: ({inspectors}) => inspectors.inspectorsAll,
             }),
         },
         methods: {
-            getInspectors() {
-                return getAllInspectors();
-            },
+            ...mapActions('inspectors', [
+                'getInspectors',
+            ]),
         },
     }
 </script>
