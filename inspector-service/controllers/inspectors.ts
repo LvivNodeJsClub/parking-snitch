@@ -29,7 +29,7 @@ export class InspectorsController extends Controller {
         return await InspectorsModel.find({}).where('deleted', false);
     }
 
-    @SuccessResponse('200', 'Created')
+    @SuccessResponse('201', 'Created')
     @Post()
     public async addNewInspector(@BodyProp() inspectorData: IInspectorModel): Promise<IInspectorModel> {
         const newInspector = new InspectorsModel(inspectorData);
