@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const inspectorsFetch = axios.create({
-    baseURL: 'http://localhost:3003/',
+    baseURL: 'http://192.168.99.100:3003/',
 });
 
 /**

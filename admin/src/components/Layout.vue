@@ -25,6 +25,10 @@
                     <md-icon>delete</md-icon>
                     <router-link class="md-list-item-text" to="/inspectors">Inspectors</router-link>
                 </md-list-item>
+                <md-list-item>
+                    <md-icon>notification_important</md-icon>
+                    <router-link class="md-list-item-text" to="/notifications">Notifications</router-link>
+                </md-list-item>
             </md-list>
         </md-app-drawer>
 

@@ -1,6 +1,7 @@
 import Home from '@/views/Home.vue'
 import About from '@/views/About.vue'
 import Inspectors from '@/views/Inspectors.vue'
+import Notifications from '@/views/Notifications.vue'
 
 export default [
     {
@@ -26,5 +27,13 @@ export default [
             title: 'Inspectors',
         },
         component: Inspectors
+    },
+    {
+        path: '/notifications',
+        name: 'notifications',
+        meta: {
+            title: 'Notifications',
+        },
+        component: Notifications
     }
 ]
