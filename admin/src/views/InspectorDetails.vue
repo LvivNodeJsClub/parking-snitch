@@ -10,7 +10,7 @@
     import { mapState, mapActions } from 'vuex'
 
     export default {
-        name: 'Inspector Details',
+        name: 'Inspector-Details',
 
         created() {
             this.getInspector(this.$route.params.id);
@@ -18,7 +18,7 @@
         computed: {
             ...mapState({
                 inspector({inspectors}) {
-                    return inspectors.byId[this.$route.params.id] || {}
+                    return inspectors.byId[this.$route.params.id] || {location:{}}
                 },
             }),
         },

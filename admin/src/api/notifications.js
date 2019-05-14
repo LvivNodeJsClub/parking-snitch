@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const notificationsFetch = axios.create({
-    baseURL: 'http://localhost:3004/',
+    baseURL: 'http://192.168.99.100:3004/',
 });
 
 /**
@@ -9,6 +9,5 @@ const notificationsFetch = axios.create({
  * @return {AxiosPromise<AxiosResponse>}
  */
 export async function getAllNotifications() {
-    const {data} = await notificationsFetch.get('/notifications');
-    return data;
+    return  notificationsFetch.get('/notifications');
 }
