@@ -12,7 +12,12 @@
                 <md-table-cell>{{notification._id}}</md-table-cell>
                 <md-table-cell>{{notification.type}}</md-table-cell>
                 <md-table-cell>{{notification.reportId}}</md-table-cell>
-                <md-table-cell><router-link class="md-list-item-text" v-bind:to="{ name: 'inspector-details', params: { id: notification.inspectorId }}">{{notification.inspector.name || notification.inspectorId}}</router-link></md-table-cell>
+                <md-table-cell>
+                    <router-link class="md-list-item-text"
+                                 v-bind:to="{ name: 'inspector-details', params: { id: notification.inspectorId }}">
+                        {{inspectorDetail(notification)}}
+                    </router-link>
+                </md-table-cell>
             </md-table-row>
 
         </md-table>
@@ -20,7 +25,7 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
+    import {mapState, mapActions} from 'vuex'
 
     export default {
         name: 'Notifications',
@@ -34,13 +39,14 @@
                 notifications: ({notifications, inspectors}) => {
                     return Object.values(notifications.byId)
                     .map(notification => {
-                        notification.inspector = inspectors.byId[notification.inspectorId]
+                        notification.inspector = inspectors.byId[notification.inspectorId];
                         return notification
-                    })
+                    });
                 },
             }),
+
         },
-        methods: {
+        methods:  {
             ...mapActions('notifications', [
                 'getNotifications',
             ]),
@@ -48,6 +54,13 @@
             ...mapActions('inspectors', [
                 'getInspectors',
             ]),
+
+            inspectorDetail(notification) {
+                if (notification.inspector) {
+                    return notification.inspector.name;
+                }
+                return notification.inspectorId;
+            },
 
             goToInspectorDetail(inspectorId) {
                 this.$router.push(`/inspectors/${inspectorId}`)
