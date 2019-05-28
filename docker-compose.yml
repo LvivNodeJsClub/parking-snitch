@@ -72,6 +72,7 @@ services:
     networks:
       - notification-service-network
       - report-processing-service-network
+      - private-network
     environment:
       DB_HOST: notification-db-host
       DB_NAME: notification-service-db
@@ -107,6 +108,7 @@ services:
     networks:
       - inspector-service-network
       - report-processing-service-network
+      - private-network
     environment:
       DB_HOST: inspector-db-host
       DB_NAME: inspector-service-db
@@ -225,6 +227,21 @@ services:
       retries: 3
       start_period: 40s
 
+  admin-api-gateway-host:
+    image: admin-api-gateway:${REPORT_SERVICE_VERSION}
+    restart: on-failure
+    links:
+      - notification-service-host
+      - inspector-service-host
+    ports:
+      - "3000:3000"
+    networks:
+      - public-network
+      - private-network
+    environment:
+      INSPECTOR_BASE_PATH: http://inspector-service-host:3000
+      NOTIFICATION_BASE_PATH: http://notification-service-host:3000
+
 volumes:
   # photo-storage:
   inspector-db-storage:
@@ -234,6 +251,10 @@ volumes:
   report-processing-db-storage:
 
 networks:
+  public-network:
+    driver: bridge
+  private-network:
+    driver: bridge
   inspector-service-network:
     driver: bridge
   photo-service-network:

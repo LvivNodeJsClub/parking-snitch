@@ -98,5 +98,20 @@ services:
       IMAGES_QUEUE_NAME: images-queue
       REPORT_QUEUE_HOST: queue-host
 
+  admin-api-gateway-host:
+    image: admin-api-gateway
+    build:
+      context: ./admin-api-gateway
+      dockerfile: Dockerfile
+    restart: on-failure
+    links:
+      - notification-service-host
+      - inspector-service-host
+    ports:
+      - "3000:3000"
+    environment:
+      INSPECTOR_BASE_PATH: http://inspector-service-host:3000
+      NOTIFICATION_BASE_PATH: http://notification-service-host:3000
+
 # volumes:
 #   photo-storage:
