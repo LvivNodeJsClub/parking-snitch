@@ -1,8 +1,12 @@
 import _keyBy from 'lodash/keyBy'
-import { getAllInspectors, getInspectorById } from '@/api/inspectors'
+import { fetchApi, updateState, STATUSES } from '@/store/helpers';
+import { getAllInspectors, getInspectorById, updateInspector } from '@/api/inspectors';
 
 const state = {
     byId: {},
+
+    error: {},
+    loading: {},
 };
 
 
@@ -10,35 +14,34 @@ const getters = {};
 
 
 const actions = {
-    async getInspectors({ commit }) {
-        const { data } = await getAllInspectors();
-        const inspectorsById = _keyBy(data, '_id');
-
-        commit({
-            type: 'setInspectors',
-            inspectorsById,
-        });
-    },
-    async getInspector({ commit }, id) {
-        const { data } = await getInspectorById(id);
-
-        commit({
-            type: 'setInspector',
-            inspector: data,
-        });
-    }
+    getInspectors: context => fetchApi(
+        context,
+        'inspectors',
+        getAllInspectors,
+    ),
+    getInspector: (context, id) => fetchApi(
+        context,
+        'inspector',
+        () => getInspectorById(id),
+    ),
+    updateInspector: (context, data) => fetchApi(
+        context,
+        'inspector',
+        () => updateInspector(data),
+    ),
 };
 
 
 const mutations = {
-    setInspectors(state, { inspectorsById }) {
-        state.byId = inspectorsById
+    inspectors(state, action) {
+        const { payload, meta } = action;
+        const byId = meta.status === STATUSES.success && _keyBy(payload, '_id');
+        updateState(state, action, byId && { byId });
     },
-    setInspector(state, { inspector }) {
-        state.byId = {
-            ...state.byId,
-            [inspector._id]: inspector,
-        }
+    inspector(state, action) {
+        const { payload, meta } = action;
+        const byId = meta.status === STATUSES.success && { ...state.byId, [payload._id]: payload } ;
+        updateState(state, action, byId && { byId });
     },
 };
 

@@ -2,6 +2,7 @@ import Home from '@/views/Home.vue'
 import About from '@/views/About.vue'
 import Inspectors from '@/views/Inspectors.vue'
 import InspectorDetails from '@/views/InspectorDetails.vue'
+import InspectorEdit from '@/views/InspectorEdit.vue'
 import Notifications from '@/views/Notifications.vue'
 
 export default [
@@ -36,6 +37,14 @@ export default [
             title: 'Inspector Details',
         },
         component: InspectorDetails
+    },
+    {
+        path: '/inspectors/:id/edit',
+        name: 'inspector-edit',
+        meta: {
+            title: 'Inspector Edit',
+        },
+        component: InspectorEdit
     },
     {
         path: '/notifications',

@@ -1,6 +1,8 @@
 import _keyBy from 'lodash/keyBy'
 import {getAllNotifications} from '@/api/notifications'
 
+export const FOO = 'setNotifications';
+
 const state = {
     byId: {},
 };
@@ -15,7 +17,7 @@ const actions = {
         const notificationsById = _keyBy(data, '_id');
 
         commit({
-            type: 'setNotifications',
+            type: FOO,
             notificationsById
         });
     }
@@ -23,7 +25,7 @@ const actions = {
 
 
 const mutations = {
-    setNotifications(state, {notificationsById}) {
+    [FOO](state, {notificationsById}) {
         state.byId = notificationsById
     },
 };

@@ -1,5 +1,5 @@
 <template>
-    <md-app id="app" md-waterfall md-mode="fixed">
+    <md-app md-waterfall md-mode="fixed">
         <md-app-toolbar class="md-primary">
             <span class="md-title">{{$route.meta.title}}</span>
         </md-app-toolbar>
@@ -44,8 +44,13 @@
     }
 </script>
 
-<style>
-    #app {
+<style lang="scss">
+    .md-app {
         min-height: 100vh;
+
+        .md-drawer {
+            width: 25vw;
+            max-width: 300px;
+        }
     }
 </style>

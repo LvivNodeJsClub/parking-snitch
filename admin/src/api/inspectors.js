@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const inspectorsFetch = axios.create({
+export const inspectorsFetch = axios.create({
     baseURL: 'http://localhost:3003/',
 });
 
@@ -44,12 +44,11 @@ export function getInspectorById(id) {
 
 /**
  * Update inspector data
- * @param {String} id - Inspector ID
  * @param {Object} body - Body data
  * @return {AxiosPromise<AxiosResponse>}
  */
-export function updateInspector(id, body) {
-    return inspectorsFetch.patch(`/inspectors/${id}`, body);
+export function updateInspector(body) {
+    return inspectorsFetch.patch(`/inspectors/${body._id}`, body);
 }
 
 /**

@@ -1,6 +1,7 @@
 <template>
     <Layout>
         <router-view />
+        <notification />
     </Layout>
 </template>
 
