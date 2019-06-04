@@ -3,7 +3,7 @@ http:
   hostname: 0.0.0.0
 admin:
   port: 9876
-  host: localhost
+  host: ${ADMIN_HOST:-localhost}
 apiEndpoints:
   notifications-api:
     paths: '/notifications'
@@ -17,6 +17,7 @@ serviceEndpoints:
   inspector-service:
     url: ${INSPECTOR_BASE_PATH:-http://localhost:3003/}
 policies:
+  - key-auth
   - cors
   - log
   - proxy
@@ -25,6 +26,7 @@ pipelines:
     apiEndpoints:
       - notifications-api
     policies:
+      - key-auth:
       - cors:
           - action:
               origin: '*'
@@ -40,6 +42,7 @@ pipelines:
     apiEndpoints:
       - inspector-api
     policies:
+      - key-auth:
       - cors:
         - action:
             origin: '*'

@@ -227,6 +227,17 @@ services:
       retries: 3
       start_period: 40s
 
+  admin-api-gateway-redis-host:
+    image: 'bitnami/redis'
+    ports:
+      - '6379:6379'
+    networks:
+      - admin-api-gateway-network
+    volumes:
+      - admin-api-gateway-storage:/bitnami/redis/data
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+
   admin-api-gateway-host:
     image: admin-api-gateway:${REPORT_SERVICE_VERSION}
     restart: on-failure
@@ -238,12 +249,15 @@ services:
     networks:
       - public-network
       - private-network
+      - admin-api-gateway-redis-host
     environment:
+      REDIS_HOST: admin-api-gateway-redis-host
       INSPECTOR_BASE_PATH: http://inspector-service-host:3000
       NOTIFICATION_BASE_PATH: http://notification-service-host:3000
 
 volumes:
   # photo-storage:
+  admin-api-gateway-storage:
   inspector-db-storage:
   photo-db-storage:
   report-db-storage:
@@ -254,6 +268,8 @@ networks:
   public-network:
     driver: bridge
   private-network:
+    driver: bridge
+  admin-api-gateway-network:
     driver: bridge
   inspector-service-network:
     driver: bridge

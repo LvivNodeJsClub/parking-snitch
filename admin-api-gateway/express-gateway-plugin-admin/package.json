@@ -1,0 +1,6 @@
+{
+  "name": "express-gateway-plugin-admin",
+  "version": "1.1.0",
+  "description": "Plugin Example for Express Gateway",
+  "main": "manifest.js"
+}
