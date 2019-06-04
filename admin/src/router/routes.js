@@ -3,6 +3,7 @@ import About from '@/views/About.vue'
 import Inspectors from '@/views/Inspectors.vue'
 import InspectorDetails from '@/views/InspectorDetails.vue'
 import InspectorEdit from '@/views/InspectorEdit.vue'
+import InspectorAdd from '@/views/InspectorAdd.vue'
 import Notifications from '@/views/Notifications.vue'
 
 export default [
@@ -20,7 +21,7 @@ export default [
         meta: {
             title: 'About',
         },
-        component: About
+        component: About,
     },
     {
         path: '/inspectors',
@@ -28,7 +29,15 @@ export default [
         meta: {
             title: 'Inspectors',
         },
-        component: Inspectors
+        component: Inspectors,
+    },
+    {
+        path: '/inspectors/add',
+        name: 'inspector-add',
+        meta: {
+            title: 'Inspector Add',
+        },
+        component: InspectorAdd,
     },
     {
         path: '/inspectors/:id',
@@ -36,7 +45,7 @@ export default [
         meta: {
             title: 'Inspector Details',
         },
-        component: InspectorDetails
+        component: InspectorDetails,
     },
     {
         path: '/inspectors/:id/edit',
@@ -44,7 +53,7 @@ export default [
         meta: {
             title: 'Inspector Edit',
         },
-        component: InspectorEdit
+        component: InspectorEdit,
     },
     {
         path: '/notifications',
@@ -52,6 +61,6 @@ export default [
         meta: {
             title: 'Notifications',
         },
-        component: Notifications
-    }
+        component: Notifications,
+    },
 ]

@@ -38,26 +38,29 @@ function logError(error) {
  * @param {ActionContext} context - Vuex action context
  * @param {String} type - Vuex mutation type
  * @param {Function} request - Axios request
+ * @param {Object} [extraMeta] - Custom object to share data between action and mutation
  */
-export async function fetchApi(context, type, request) {
+export async function fetchApi(context, type, request, extraMeta) {
     context.commit({
         type,
-        meta: {status: STATUSES.pending},
+        meta: {status: STATUSES.pending, ...extraMeta},
     });
 
     try {
         const response = await request();
         context.commit({
             type,
-            meta: {status: STATUSES.success},
+            meta: {status: STATUSES.success, ...extraMeta},
             payload: response.data,
         });
+
+        return response;
     } catch (error) {
         logError(error);
 
         context.commit({
             type,
-            meta: {status: STATUSES.error},
+            meta: {status: STATUSES.error, ...extraMeta},
             payload: error,
         });
 

@@ -4,6 +4,10 @@ import routes from './routes'
 
 Vue.use(Router);
 
+// workaround, see https://github.com/vuematerial/vue-material/issues/1977
+Vue.component('router-link', Vue.options.components.RouterLink);
+Vue.component('router-view', Vue.options.components.RouterView);
+
 const router = new Router({
     mode: 'history',
     routes,

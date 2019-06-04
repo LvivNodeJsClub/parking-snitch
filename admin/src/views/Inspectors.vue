@@ -32,7 +32,7 @@
                                 <md-icon>edit</md-icon>
                                 <span class="md-list-item-text">Edit</span>
                             </md-menu-item>
-                            <md-menu-item @click="deleteInspector(inspector._id)">
+                            <md-menu-item @click="confirmInspectorRemoval(inspector._id)">
                                 <md-icon>delete</md-icon>
                                 <span class="md-list-item-text">Delete</span>
                             </md-menu-item>
@@ -43,15 +43,9 @@
 
         </md-table>
 
-        <md-dialog-confirm
-            :md-active.sync="active"
-            md-title="Use Google's location service?"
-            md-content="Let Google help apps determine location. <br> This means sending <strong>anonymous</strong> location data to Google, even when no apps are running."
-            md-confirm-text="Agree"
-            md-cancel-text="Disagree"
-            @md-cancel="onCancel"
-            @md-confirm="onConfirm"
-        />
+        <md-button to="/inspectors/add" class="md-fab md-primary md-fab-bottom-right">
+            <md-icon>add</md-icon>
+        </md-button>
     </div>
 </template>
 
@@ -78,14 +72,8 @@
         methods: {
             ...mapActions('inspectors', [
                 'getInspectors',
+                'deleteInspector',
             ]),
-
-            onConfirm() {
-                return 111
-            },
-            onCancel() {
-                return 222
-            },
 
             goToInspectorDetail(inspectorId) {
                 this.$router.push(`/inspectors/${inspectorId}`)
@@ -93,11 +81,11 @@
             goToInspectorEdit(inspectorId) {
                 this.$router.push(`/inspectors/${inspectorId}/edit`)
             },
-            async deleteInspector(inspectorId) {
+            async confirmInspectorRemoval(inspectorId) {
                 const isConfirmed = await this.$confirm('Are you sure you want to delete inspector?');
 
                 if (isConfirmed) {
-                    console.log("Deleted")
+                    this.deleteInspector(inspectorId)
                 }
             },
 
