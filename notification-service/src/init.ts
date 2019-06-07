@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import logger from "./logger";
 
 const {DB_PORT = 27017, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME} = process.env;
 
@@ -11,7 +12,7 @@ export async function init() {
             dbName: DB_NAME,
         })
     } catch (error) {
-        console.log(error);
+        logger.log(error);
         process.exit(1);
     }
 }
