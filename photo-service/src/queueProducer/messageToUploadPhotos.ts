@@ -1,4 +1,4 @@
 export default interface IMessageToUploadPhotos {
-    reportId: string,
-    photoIds: [string],
-};
+	reportId: string;
+	photoIds: [string];
+}
