@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, {Document, Model} from "mongoose";
 const Schema = mongoose.Schema;
 
 export enum Statuses {
@@ -9,7 +9,7 @@ export enum Statuses {
     DONE = "Done",
 }
 
-const reportSchema = new Schema({
+const ReportSchema = new Schema({
     userId: String,
     description: String,
     location: {
@@ -31,4 +31,25 @@ const reportSchema = new Schema({
     timestamps: true
 });
 
-export default mongoose.model('Report', reportSchema);
+export interface ILocation {
+    lat: number,
+    lon: number,
+}
+
+export interface IComment {
+    body: string,
+    date: Date,
+}
+
+export interface IReport {
+    userId?: string,
+    description?: string,
+    location: ILocation,
+    photoIds?: string[],
+    status?: Statuses,
+    comments?: IComment[],
+}
+
+interface ReportModel extends Document, IReport {}
+
+export const Report: Model<ReportModel> = mongoose.model<ReportModel>('Report', ReportSchema);

@@ -1,3 +1,7 @@
 *.js
+!jest.config.js
 .env
 dist
+src/routes/routes.ts
+src/swagger.yaml
+

@@ -1,11 +1,10 @@
 import Router from 'koa-router';
-
-import reportsRouter from './reports';
-import healthcheck from './healthcheck';
+import '../controllers/reports';
+import '../controllers/healthcheck';
+import { RegisterRoutes } from "./routes";
 
 const router = new Router();
 
-router.use(healthcheck.routes())
-router.use('/reports', reportsRouter.routes(), reportsRouter.allowedMethods());
+RegisterRoutes(router);
 
 export default router;

@@ -1,0 +1,12 @@
+{
+  "swagger": {
+    "entryFile": "./src/index.ts",
+    "outputDirectory": "./src",
+    "yaml": true
+  },
+  "routes": {
+    "entryFile": "./src/index.ts",
+    "routesDir": "./src/routes",
+    "middleware": "koa"
+  }
+}
