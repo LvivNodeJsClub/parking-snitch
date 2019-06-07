@@ -1,0 +1,56 @@
+http:
+  port: ${PORT:-8080}
+  hostname: 0.0.0.0
+admin:
+  port: 9876
+  host: ${ADMIN_HOST:-localhost}
+apiEndpoints:
+  notifications-api:
+    paths: '/notifications'
+  inspector-api:
+    paths:
+      - '/inspectors'
+      - '/inspectors/*'
+serviceEndpoints:
+  notifications-service:
+    url: ${NOTIFICATION_BASE_PATH:-http://localhost:3004/}
+  inspector-service:
+    url: ${INSPECTOR_BASE_PATH:-http://localhost:3003/}
+policies:
+  - key-auth
+  - cors
+  - log
+  - proxy
+pipelines:
+  notifications:
+    apiEndpoints:
+      - notifications-api
+    policies:
+      - key-auth:
+      - cors:
+          - action:
+              origin: '*'
+              methods: 'HEAD,PUT,PATCH,POST,DELETE,GET,OPTIONS'
+      - log:
+          - action:
+              message: ${req.method} ${req.originalUrl}
+      - proxy:
+          - action:
+              serviceEndpoint: notifications-service
+              changeOrigin: true
+  inspector:
+    apiEndpoints:
+      - inspector-api
+    policies:
+      - key-auth:
+      - cors:
+        - action:
+            origin: '*'
+            methods: 'HEAD,PUT,PATCH,POST,DELETE,GET,OPTIONS'
+      - log:
+        - action:
+            message: ${req.method} ${req.originalUrl}
+      - proxy:
+          - action:
+              serviceEndpoint: inspector-service
+              changeOrigin: true

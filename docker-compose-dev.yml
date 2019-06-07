@@ -1,7 +1,7 @@
 version: "3.4"
 
 services:
- 
+
   db-host:
     image: mongo:latest
     ports:
@@ -9,12 +9,19 @@ services:
 
   queue-host:
     image: rabbitmq:3-management
-    environment:
-      RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
-      RABBITMQ_DEFAULT_VHOST: /
     ports:
       - "15672"
       - "5672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+      RABBITMQ_DEFAULT_VHOST: /
+
+  redis-host:
+    image: 'bitnami/redis'
+    ports:
+      - '6379:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
 
   report-processing-service-host:
     image: report-processing-service
@@ -71,8 +78,8 @@ services:
       - queue-host
     ports:
       - "3002:3000"
-#    volumes:
-#      - photo-storage:/usr/app/storage
+   # volumes:
+   #   - photo-storage:/usr/app/storage
     environment:
       DB_HOST: db-host
       DB_NAME: photo-service-db
@@ -97,6 +104,24 @@ services:
       QUEUE_HOST: queue-host
       IMAGES_QUEUE_NAME: images-queue
       REPORT_QUEUE_HOST: queue-host
+
+  admin-api-gateway-host:
+   image: admin-api-gateway
+   build:
+     context: ./admin-api-gateway
+     dockerfile: Dockerfile
+   restart: on-failure
+   links:
+     - notification-service-host
+     - inspector-service-host
+     - redis-host
+   ports:
+     - "3000:3000"
+     - "9876:9876"
+   environment:
+     REDIS_HOST: redis-host
+     INSPECTOR_BASE_PATH: http://inspector-service-host:3000
+     NOTIFICATION_BASE_PATH: http://notification-service-host:3000
 
 # volumes:
 #   photo-storage:
