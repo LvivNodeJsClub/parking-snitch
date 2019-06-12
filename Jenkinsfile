@@ -182,6 +182,11 @@ pipeline {
             }
         }
         stage('Lint report-service') {
+            when {
+                expression {
+                    return false
+                }
+            }
             steps {
                 echo 'Lint report-service'
                 script {
@@ -295,6 +300,154 @@ pipeline {
                 echo 'Publish artifacts for report-service'
                 script {
                     dir ('report-service') {
+                        sh 'docker push'
+                    }
+                }
+            }
+        }
+
+        /*
+         * Build `photo-service`
+         */
+        stage('Init environment variables for photo-service') {
+            steps {
+                echo 'Init environment variables for photo-service'
+            }
+        }
+        stage('Clean photo-service') {
+            steps {
+                echo 'Clean photo-service'
+                script {
+                    dir ('photo-service') {
+                        sh 'npm run clean'
+                    }
+                }
+            }
+        }
+        stage('Install photo-service') {
+            steps {
+                echo 'Install photo-service'
+                script {
+                    dir ('photo-service') {
+                        sh 'npm ci'
+                    }
+                }
+            }
+        }
+        stage('Lint photo-service') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Lint photo-service'
+                script {
+                    dir ('photo-service') {
+                        sh 'npm run lint'
+                    }
+                }
+            }
+        }
+        stage('Building photo-service') {
+            steps {
+                echo 'Building photo-service'
+                script {
+                    dir ('photo-service') {
+                        sh 'npm run build'
+                    }
+                }
+            }
+        }
+        stage('Testing photo-service') {
+            steps {
+                echo 'Testing photo-service'
+                script {
+                    dir ('photo-service') {
+                        sh 'npm test'
+                    }
+                }
+            }
+            post {
+                always {
+                    echo 'Save report'
+                    junit 'photo-service/test-report/**/*.xml'
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'photo-service/test-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing Test Report'
+                    ]
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'photo-service/test-coverage',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing Test Coverage Report'
+                  ]
+                }
+            }
+        }
+        stage('Spec photo-service') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Spec photo-service'
+                script {
+                    dir ('photo-service') {
+                        sh 'npm run spec'
+                    }
+                }
+            }
+            post {
+                always {
+                    echo 'Save report'
+                    junit 'photo-service/spec-report/**/*.xml'
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'photo-service/spec-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing Spec Report'
+                    ]
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'photo-service/spec-coverage',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing spec Coverage Report'
+                  ]
+                }
+            }
+        }
+        stage('Build docker image for photo-service') {
+            steps {
+                echo 'Build docker image for photo-service'
+                script {
+                    dir ('photo-service') {
+                        sh 'docker build .'
+                    }
+                }
+            }
+        }
+        stage('Publish artifacts for photo-service') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Publish artifacts for photo-service'
+                script {
+                    dir ('photo-service') {
                         sh 'docker push'
                     }
                 }
