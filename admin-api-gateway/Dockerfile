@@ -9,6 +9,7 @@ ENV PORT 3000
 FROM base
 
 COPY package*.json ./
+COPY express-gateway-plugin-admin/ ./
 
 RUN npm ci --only=production
 
