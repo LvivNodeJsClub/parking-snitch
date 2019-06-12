@@ -749,5 +749,163 @@ pipeline {
                 }
             }
         }
+
+        /*
+         * Build `admin-api-gateway`
+         */
+        stage('Init environment variables for admin-api-gateway') {
+            steps {
+                echo 'Init environment variables for admin-api-gateway'
+            }
+        }
+        stage('Clean admin-api-gateway') {
+            steps {
+                echo 'Clean admin-api-gateway'
+                script {
+                    dir ('admin-api-gateway') {
+                        sh 'npm run clean'
+                    }
+                }
+            }
+        }
+        stage('Install admin-api-gateway') {
+            steps {
+                echo 'Install admin-api-gateway'
+                script {
+                    dir ('admin-api-gateway') {
+                        sh 'npm ci'
+                    }
+                }
+            }
+        }
+        stage('Lint admin-api-gateway') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Lint admin-api-gateway'
+                script {
+                    dir ('admin-api-gateway') {
+                        sh 'npm run lint'
+                    }
+                }
+            }
+        }
+        stage('Building admin-api-gateway') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Building admin-api-gateway'
+                script {
+                    dir ('admin-api-gateway') {
+                        sh 'npm run build'
+                    }
+                }
+            }
+        }
+        stage('Testing admin-api-gateway') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Testing admin-api-gateway'
+                script {
+                    dir ('admin-api-gateway') {
+                        sh 'npm test'
+                    }
+                }
+            }
+            post {
+                always {
+                    echo 'Save report'
+                    junit 'admin-api-gateway/test-report/**/*.xml'
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'admin-api-gateway/test-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing Test Report'
+                    ]
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'admin-api-gateway/test-coverage',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing Test Coverage Report'
+                  ]
+                }
+            }
+        }
+        stage('Spec admin-api-gateway') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Spec admin-api-gateway'
+                script {
+                    dir ('admin-api-gateway') {
+                        sh 'npm run spec'
+                    }
+                }
+            }
+            post {
+                always {
+                    echo 'Save report'
+                    junit 'admin-api-gateway/spec-report/**/*.xml'
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'admin-api-gateway/spec-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing Spec Report'
+                    ]
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'admin-api-gateway/spec-coverage',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing spec Coverage Report'
+                  ]
+                }
+            }
+        }
+        stage('Build docker image for admin-api-gateway') {
+            steps {
+                echo 'Build docker image for admin-api-gateway'
+                script {
+                    dir ('admin-api-gateway') {
+                        sh 'docker build .'
+                    }
+                }
+            }
+        }
+        stage('Publish artifacts for admin-api-gateway') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Publish artifacts for admin-api-gateway'
+                script {
+                    dir ('admin-api-gateway') {
+                        sh 'docker push'
+                    }
+                }
+            }
+        }
     }
 }
