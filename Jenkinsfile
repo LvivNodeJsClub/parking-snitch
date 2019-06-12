@@ -367,29 +367,29 @@ pipeline {
                         sh 'npm test'
                     }
                 }
-            }
-            post {
-                always {
-                    echo 'Save report'
-                    junit 'photo-service/test-report/**/*.xml'
-                    publishHTML target: [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: true,
-                        reportDir: 'photo-service/test-report',
-                        reportFiles: 'index.html',
-                        reportName: 'Report Processing Test Report'
-                    ]
-                    publishHTML target: [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: true,
-                        reportDir: 'photo-service/test-coverage',
-                        reportFiles: 'index.html',
-                        reportName: 'Report Processing Test Coverage Report'
-                  ]
-                }
-            }
+            // }
+            // post {
+            //     always {
+            //         echo 'Save report'
+            //         junit 'photo-service/test-report/**/*.xml'
+            //         publishHTML target: [
+            //             allowMissing: false,
+            //             alwaysLinkToLastBuild: false,
+            //             keepAll: true,
+            //             reportDir: 'photo-service/test-report',
+            //             reportFiles: 'index.html',
+            //             reportName: 'Report Processing Test Report'
+            //         ]
+            //         publishHTML target: [
+            //             allowMissing: false,
+            //             alwaysLinkToLastBuild: false,
+            //             keepAll: true,
+            //             reportDir: 'photo-service/test-coverage',
+            //             reportFiles: 'index.html',
+            //             reportName: 'Report Processing Test Coverage Report'
+            //       ]
+            //     }
+            // }
         }
         stage('Spec photo-service') {
             when {
@@ -601,6 +601,149 @@ pipeline {
                 echo 'Publish artifacts for notification-service'
                 script {
                     dir ('notification-service') {
+                        sh 'docker push'
+                    }
+                }
+            }
+        }
+
+        /*
+         * Build `inspector-service`
+         */
+        stage('Init environment variables for inspector-service') {
+            steps {
+                echo 'Init environment variables for inspector-service'
+            }
+        }
+        stage('Clean inspector-service') {
+            steps {
+                echo 'Clean inspector-service'
+                script {
+                    dir ('inspector-service') {
+                        sh 'npm run clean'
+                    }
+                }
+            }
+        }
+        stage('Install inspector-service') {
+            steps {
+                echo 'Install inspector-service'
+                script {
+                    dir ('inspector-service') {
+                        sh 'npm ci'
+                    }
+                }
+            }
+        }
+        stage('Lint inspector-service') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Lint inspector-service'
+                script {
+                    dir ('inspector-service') {
+                        sh 'npm run lint'
+                    }
+                }
+            }
+        }
+        stage('Building inspector-service') {
+            steps {
+                echo 'Building inspector-service'
+                script {
+                    dir ('inspector-service') {
+                        sh 'npm run build'
+                    }
+                }
+            }
+        }
+        stage('Testing inspector-service') {
+            steps {
+                echo 'Testing inspector-service'
+                script {
+                    dir ('inspector-service') {
+                        sh 'npm test'
+                    }
+                }
+            }
+            post {
+                always {
+                    echo 'Save report'
+                    junit 'inspector-service/test-report/**/*.xml'
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'inspector-service/test-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing Test Report'
+                    ]
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'inspector-service/test-coverage',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing Test Coverage Report'
+                  ]
+                }
+            }
+        }
+        stage('Spec inspector-service') {
+            steps {
+                echo 'Spec inspector-service'
+                script {
+                    dir ('inspector-service') {
+                        sh 'npm run spec'
+                    }
+                }
+            }
+            post {
+                always {
+                    echo 'Save report'
+                    junit 'inspector-service/spec-report/**/*.xml'
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'inspector-service/spec-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing Spec Report'
+                    ]
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'inspector-service/spec-coverage',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing spec Coverage Report'
+                  ]
+                }
+            }
+        }
+        stage('Build docker image for inspector-service') {
+            steps {
+                echo 'Build docker image for inspector-service'
+                script {
+                    dir ('inspector-service') {
+                        sh 'docker build .'
+                    }
+                }
+            }
+        }
+        stage('Publish artifacts for inspector-service') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Publish artifacts for inspector-service'
+                script {
+                    dir ('inspector-service') {
                         sh 'docker push'
                     }
                 }
