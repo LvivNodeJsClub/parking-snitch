@@ -453,5 +453,158 @@ pipeline {
                 }
             }
         }
+
+        /*
+         * Build `notification-service`
+         */
+        stage('Init environment variables for notification-service') {
+            steps {
+                echo 'Init environment variables for notification-service'
+            }
+        }
+        stage('Clean notification-service') {
+            steps {
+                echo 'Clean notification-service'
+                script {
+                    dir ('notification-service') {
+                        sh 'npm run clean'
+                    }
+                }
+            }
+        }
+        stage('Install notification-service') {
+            steps {
+                echo 'Install notification-service'
+                script {
+                    dir ('notification-service') {
+                        sh 'npm ci'
+                    }
+                }
+            }
+        }
+        stage('Lint notification-service') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Lint notification-service'
+                script {
+                    dir ('notification-service') {
+                        sh 'npm run lint'
+                    }
+                }
+            }
+        }
+        stage('Building notification-service') {
+            steps {
+                echo 'Building notification-service'
+                script {
+                    dir ('notification-service') {
+                        sh 'npm run build'
+                    }
+                }
+            }
+        }
+        stage('Testing notification-service') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Testing notification-service'
+                script {
+                    dir ('notification-service') {
+                        sh 'npm test'
+                    }
+                }
+            }
+            post {
+                always {
+                    echo 'Save report'
+                    junit 'notification-service/test-report/**/*.xml'
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'notification-service/test-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing Test Report'
+                    ]
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'notification-service/test-coverage',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing Test Coverage Report'
+                  ]
+                }
+            }
+        }
+        stage('Spec notification-service') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Spec notification-service'
+                script {
+                    dir ('notification-service') {
+                        sh 'npm run spec'
+                    }
+                }
+            }
+            post {
+                always {
+                    echo 'Save report'
+                    junit 'notification-service/spec-report/**/*.xml'
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'notification-service/spec-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing Spec Report'
+                    ]
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'notification-service/spec-coverage',
+                        reportFiles: 'index.html',
+                        reportName: 'Report Processing spec Coverage Report'
+                  ]
+                }
+            }
+        }
+        stage('Build docker image for notification-service') {
+            steps {
+                echo 'Build docker image for notification-service'
+                script {
+                    dir ('notification-service') {
+                        sh 'docker build .'
+                    }
+                }
+            }
+        }
+        stage('Publish artifacts for notification-service') {
+            when {
+                expression {
+                    return false
+                }
+            }
+            steps {
+                echo 'Publish artifacts for notification-service'
+                script {
+                    dir ('notification-service') {
+                        sh 'docker push'
+                    }
+                }
+            }
+        }
     }
 }
