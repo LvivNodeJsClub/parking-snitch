@@ -202,6 +202,11 @@ pipeline {
             }
         }
         stage('Testing report-service') {
+            when {
+                expression {
+                    return false
+                }
+            }
             steps {
                 echo 'Testing report-service'
                 script {
@@ -234,6 +239,11 @@ pipeline {
             }
         }
         stage('Spec report-service') {
+            when {
+                expression {
+                    return false
+                }
+            }
             steps {
                 echo 'Spec report-service'
                 script {
