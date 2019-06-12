@@ -367,7 +367,7 @@ pipeline {
                         sh 'npm test'
                     }
                 }
-            // }
+            }
             // post {
             //     always {
             //         echo 'Save report'
