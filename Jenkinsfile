@@ -230,7 +230,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'report-service/test-report',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing Test Report'
+                        reportName: 'Report Test Report'
                     ]
                     publishHTML target: [
                         allowMissing: false,
@@ -238,7 +238,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'report-service/test-coverage',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing Test Coverage Report'
+                        reportName: 'Report Test Coverage Report'
                   ]
                 }
             }
@@ -267,7 +267,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'report-service/spec-report',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing Spec Report'
+                        reportName: 'Report Spec Report'
                     ]
                     publishHTML target: [
                         allowMissing: false,
@@ -275,7 +275,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'report-service/spec-coverage',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing spec Coverage Report'
+                        reportName: 'Report spec Coverage Report'
                   ]
                 }
             }
@@ -378,7 +378,7 @@ pipeline {
             //             keepAll: true,
             //             reportDir: 'photo-service/test-report',
             //             reportFiles: 'index.html',
-            //             reportName: 'Report Processing Test Report'
+            //             reportName: 'Photo Test Report'
             //         ]
             //         publishHTML target: [
             //             allowMissing: false,
@@ -386,7 +386,7 @@ pipeline {
             //             keepAll: true,
             //             reportDir: 'photo-service/test-coverage',
             //             reportFiles: 'index.html',
-            //             reportName: 'Report Processing Test Coverage Report'
+            //             reportName: 'Photo Test Coverage Report'
             //       ]
             //     }
             // }
@@ -415,7 +415,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'photo-service/spec-report',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing Spec Report'
+                        reportName: 'Photo Spec Report'
                     ]
                     publishHTML target: [
                         allowMissing: false,
@@ -423,7 +423,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'photo-service/spec-coverage',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing spec Coverage Report'
+                        reportName: 'Photospec Coverage Report'
                   ]
                 }
             }
@@ -531,7 +531,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'notification-service/test-report',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing Test Report'
+                        reportName: 'Notification Test Report'
                     ]
                     publishHTML target: [
                         allowMissing: false,
@@ -539,7 +539,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'notification-service/test-coverage',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing Test Coverage Report'
+                        reportName: 'Notification Test Coverage Report'
                   ]
                 }
             }
@@ -568,7 +568,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'notification-service/spec-report',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing Spec Report'
+                        reportName: 'Notification Spec Report'
                     ]
                     publishHTML target: [
                         allowMissing: false,
@@ -576,7 +576,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'notification-service/spec-coverage',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing spec Coverage Report'
+                        reportName: 'Notification spec Coverage Report'
                   ]
                 }
             }
@@ -679,7 +679,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'inspector-service/test-report',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing Test Report'
+                        reportName: 'Inspector Test Report'
                     ]
                     publishHTML target: [
                         allowMissing: false,
@@ -687,7 +687,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'inspector-service/test-coverage',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing Test Coverage Report'
+                        reportName: 'Inspector Test Coverage Report'
                   ]
                 }
             }
@@ -711,7 +711,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'inspector-service/spec-report',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing Spec Report'
+                        reportName: 'Inspector Spec Report'
                     ]
                     publishHTML target: [
                         allowMissing: false,
@@ -719,7 +719,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'inspector-service/spec-coverage',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing spec Coverage Report'
+                        reportName: 'Inspector spec Coverage Report'
                   ]
                 }
             }
@@ -832,7 +832,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'admin-api-gateway/test-report',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing Test Report'
+                        reportName: 'Api gateway Test Report'
                     ]
                     publishHTML target: [
                         allowMissing: false,
@@ -840,7 +840,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'admin-api-gateway/test-coverage',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing Test Coverage Report'
+                        reportName: 'Api gateway Test Coverage Report'
                   ]
                 }
             }
@@ -869,7 +869,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'admin-api-gateway/spec-report',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing Spec Report'
+                        reportName: 'Api gateway Spec Report'
                     ]
                     publishHTML target: [
                         allowMissing: false,
@@ -877,7 +877,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'admin-api-gateway/spec-coverage',
                         reportFiles: 'index.html',
-                        reportName: 'Report Processing spec Coverage Report'
+                        reportName: 'Api gateway spec Coverage Report'
                   ]
                 }
             }
