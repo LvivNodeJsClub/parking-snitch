@@ -5,84 +5,11 @@ pipeline {
     agent any
 
     stages {
-        stage('Init environment variables.') {
+         stage('Init environment variables.') {
             steps {
                 script {
-                    def scmVars = checkout scm
-                    env.MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT = scmVars.GIT_PREVIOUS_SUCCESSFUL_COMMIT
-                    echo "Building... ${MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT}"
+                    echo 'Init environment variables for parking-snitch'
                     sh 'printenv'
-                }
-            }
-        }
-
-        /*
-         * Build `report-service`
-         */
-        stage('Init environment variables for report-service') {
-            when {
-                expression {
-                    return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
-                }
-            }
-            steps {
-                echo 'Init environment variables for report-service'
-            }
-        }
-        stage('Install and building report-service') {
-            when {
-                expression {
-                    return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
-                }
-            }
-            steps {
-                script {
-                    dir ('report-service') {
-                        sh 'npm ci'
-                        sh 'npm build'
-                    }
-                }
-            }
-        }
-        stage('Testing report-service') {
-            when {
-                expression {
-                    return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
-                }
-            }
-            steps {
-                script {
-                    dir ('report-service') {
-                        sh 'npm test'
-                    }
-                }
-            }
-        }
-        stage('Build docker image for report-service') {
-            when {
-                expression {
-                    return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
-                }
-            }
-            steps {
-                script {
-                    dir ('report-service') {
-                        sh 'docker build .'
-                    }
-                }
-            }
-        }
-        stage('Publish artifacts for report-service') {
-            when {
-                expression {
-                    return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-service'")
-                }
-            }
-            steps {
-                script {
-                    dir ('report-service') {
-                        sh 'docker push'
-                    }
                 }
             }
         }
@@ -91,26 +18,11 @@ pipeline {
          * Build `report-processing-service`
          */
         stage('Init environment variables for report-processing-service') {
-            when {
-                anyOf {
-                    branch 'master'
-                    buildingTag()
-                    expression {
-                        return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^report-processing-service'")
-                    }
-                }
-            }
             steps {
                 echo 'Init environment variables for report-processing-service'
-                script {
-                    env.REPORTPROCESSINGSERVICE = 'true'
-                }
             }
         }
         stage('Clean report-processing-service') {
-            when {
-                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-            }
             steps {
                 echo 'Clean report-processing-service'
                 script {
@@ -121,9 +33,6 @@ pipeline {
             }
         }
         stage('Install report-processing-service') {
-            when {
-                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-            }
             steps {
                 echo 'Install report-processing-service'
                 script {
@@ -134,9 +43,6 @@ pipeline {
             }
         }
         stage('Lint report-processing-service') {
-            when {
-                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-            }
             steps {
                 echo 'Lint report-processing-service'
                 script {
@@ -147,9 +53,6 @@ pipeline {
             }
         }
         stage('Building report-processing-service') {
-            when {
-                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-            }
             steps {
                 echo 'Building report-processing-service'
                 script {
@@ -160,9 +63,6 @@ pipeline {
             }
         }
         stage('Testing report-processing-service') {
-            when {
-                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-            }
             steps {
                 echo 'Testing report-processing-service'
                 script {
@@ -195,9 +95,6 @@ pipeline {
             }
         }
         stage('Spec report-processing-service') {
-            when {
-                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-            }
             steps {
                 echo 'Spec report-processing-service'
                 script {
@@ -230,9 +127,6 @@ pipeline {
             }
         }
         stage('Build docker image for report-processing-service') {
-            when {
-                environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-            }
             steps {
                 echo 'Build docker image for report-processing-service'
                 script {
@@ -244,9 +138,8 @@ pipeline {
         }
         stage('Publish artifacts for report-processing-service') {
             when {
-                allOf {
-                    environment name: 'REPORTPROCESSINGSERVICE', value: 'true'
-                    environment name: 'REPORTPROCESSINGSERVICE', value: 'false'
+                expression {
+                    return false
                 }
             }
             steps {
@@ -259,146 +152,4 @@ pipeline {
             }
         }
 
-        /*
-         * Build `image-service`
-         */
-        stage('Init environment variables for image-service') {
-            when {
-                expression {
-                    return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^image-service'")
-                }
-            }
-            steps {
-                echo 'Init environment variables for image-service'
-            }
-        }
-        stage('Install and building image-service') {
-            when {
-                expression {
-                    return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^image-service'")
-                }
-            }
-            steps {
-                script {
-                    dir ('image-service') {
-                        sh 'npm ci'
-                        sh 'npm build'
-                    }
-                }
-            }
-        }
-        stage('Testing image-service') {
-            when {
-                expression {
-                    return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^image-service'")
-                }
-            }
-            steps {
-                script {
-                    dir ('image-service') {
-                        sh 'npm test'
-                    }
-                }
-            }
-        }
-        stage('Build docker image for image-service') {
-            when {
-                expression {
-                    return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^image-service'")
-                }
-            }
-            steps {
-                script {
-                    dir ('image-service') {
-                        sh 'docker build .'
-                    }
-                }
-            }
-        }
-        stage('Publish artifacts for image-service') {
-            when {
-                expression {
-                    return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^image-service'")
-                }
-            }
-            steps {
-                script {
-                    dir ('image-service') {
-                        sh 'docker push'
-                    }
-                }
-            }
-        }
-
-        /*
-         * Build `inspector-service`
-         */
-        stage('Init environment variables for inspector-service') {
-            when {
-                expression {
-                    return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^inspector-service'")
-                }
-            }
-            steps {
-                echo 'Init environment variables for inspector-service'
-            }
-        }
-        stage('Install and building inspector-service') {
-            when {
-                expression {
-                    return !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^inspector-service'")
-                }
-            }
-            steps {
-                script {
-                    dir ('inspector-service') {
-                        sh 'npm ci'
-                        sh 'npm build'
-                    }
-                }
-            }
-        }
-        stage('Testing inspector-service') {
-            when {
-                expression {
-                    return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^inspector-service'")
-                }
-            }
-            steps {
-                script {
-                    dir ('inspector-service') {
-                        sh 'npm test'
-                    }
-                }
-            }
-        }
-        stage('Build docker image for inspector-service') {
-            when {
-                expression {
-                    return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^inspector-service'")
-                }
-            }
-            steps {
-                script {
-                    dir ('inspector-service') {
-                        sh 'docker build .'
-                    }
-                }
-            }
-        }
-        stage('Publish artifacts for inspector-service') {
-            when {
-                expression {
-                    return false && !sh(returnStatus: true, script: "git diff --name-only $MY_GIT_PREVIOUS_SUCCESSFUL_COMMIT|egrep -q '^inspector-service'")
-                }
-            }
-            steps {
-                script {
-                    dir ('inspector-service') {
-                        sh 'docker push'
-                    }
-                }
-            }
-        }
-    }
 }
