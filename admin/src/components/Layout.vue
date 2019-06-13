@@ -17,11 +17,6 @@
                 </md-list-item>
 
                 <md-list-item>
-                    <md-icon>send</md-icon>
-                    <router-link class="md-list-item-text" to="/about">About</router-link>
-                </md-list-item>
-
-                <md-list-item>
                     <md-icon>delete</md-icon>
                     <router-link class="md-list-item-text" to="/inspectors">Inspectors</router-link>
                 </md-list-item>

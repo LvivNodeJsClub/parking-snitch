@@ -1,5 +1,4 @@
 import Home from '@/views/Home.vue'
-import About from '@/views/About.vue'
 import Inspectors from '@/views/Inspectors.vue'
 import InspectorDetails from '@/views/InspectorDetails.vue'
 import InspectorEdit from '@/views/InspectorEdit.vue'
@@ -14,14 +13,6 @@ export default [
             title: 'Home Page',
         },
         component: Home,
-    },
-    {
-        path: '/about',
-        name: 'about',
-        meta: {
-            title: 'About',
-        },
-        component: About,
     },
     {
         path: '/inspectors',
