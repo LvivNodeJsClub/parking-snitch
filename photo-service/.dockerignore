@@ -4,4 +4,8 @@ dist
 node_modules
 npm-debug.log
 
-coverage/
+test/
+test-coverage/
+test-report/
+spec-coverage/
+spec-report/

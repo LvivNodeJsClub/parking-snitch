@@ -5,6 +5,9 @@
   "license": "UNLICENSED",
   "version": "1.0.0",
   "main": "server.js",
+  "scripts": {
+    "clean": "rm -rf node_modules/ && rm -rf test-coverage/ && rm -rf test-report/ && rm -rf spec-coverage/ && rm -rf spec-report/ && rm -rf dist/ && rm -f src/routes/routes.ts"
+  },
   "dependencies": {
     "express-gateway": "^1.16.3",
     "express-gateway-plugin-admin": "file:./express-gateway-plugin-admin"
