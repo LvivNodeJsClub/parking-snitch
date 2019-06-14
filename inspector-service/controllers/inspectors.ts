@@ -1,66 +1,79 @@
 import {BadRequestError, NotFoundError} from '../errorHandler/customErrors';
-import {Inspector as InspectorsModel, InspectorModel} from '../models/inspectors';
+import {Inspector as InspectorsModel, IInspectorModel} from '../models/inspectors';
 import statusCodes from 'http-status-codes';
-import {Request, Response} from "express";
 import {googleapiConfigs} from '../config';
 import {MAX_INSPECTOR_WALK_DURATION, MAX_INSPECTOR_WALK_DISTANCE} from '../constants';
 
 const googleMapsAPIClient = require('@google/maps').createClient({key: process.env.GOOGLE_API_KEY, Promise});
 
-export async function getInspectorById(req: Request, res: Response) {
-    const inspector = await InspectorsModel.findById(req.params.id).where('deleted', false);
-    if (!inspector) {
-        throw new NotFoundError(`Report with ID ${req.params.id} was not found`);
-    }
-    res.send(inspector);
-}
+import {Controller, Route, Get, Post, Patch, Put, Delete, Body, SuccessResponse, Query, BodyProp} from "tsoa";
 
-export async function getAllInspectors(req: Request, res: Response) {
-    res.send(await InspectorsModel.find({}).where('deleted', false));
-}
-
-export async function addNewInspector(req: Request, res: Response) {
-    const inspectorData = req.body;
-    inspectorData.deleted = false;
-    // TODO: validation should be here
-    const newInspector = new InspectorsModel(inspectorData);
-    await newInspector.save();
-    res.status(statusCodes.CREATED).send(newInspector);
-}
-
-export async function updateInspector(req: Request, res: Response) {
-    const inspectorData = req.body;
-    // TODO: validation should be here
-    res.send(await InspectorsModel.findOneAndUpdate({'_id': req.params.id}, inspectorData, {new: true}));
-}
-
-export async function replaceInspector(req: Request, res: Response) {
-    const inspectorData = req.body;
-    // TODO: validation should be here
-    res.send(await InspectorsModel.replaceOne({'_id': req.params.id}, inspectorData));
-}
-
-export async function deleteInspector(req: Request, res: Response) {
-    await InspectorsModel.findOneAndUpdate({'_id': req.params.id}, {deleted: true});
-    res.sendStatus(statusCodes.NO_CONTENT);
-}
-
-export async function getNearest(req: Request, res: Response) {
-    const inspectors = await InspectorsModel.find({}).where('deleted', false);
-    if (!inspectors.length) throw new NotFoundError('No inspectors were found');
-    if (!req.query.lat || !req.query.lon) throw new BadRequestError('Destination coordinates must be specified');
-
-    let result: any;
-    if (process.env.CALC_DISTANCE_WITH_GOOGLE_API === 'TRUE') {
-        result = await findNearestViaGoogleAPI(inspectors, req.query);
-    } else {
-        result = findNearestViaMath(inspectors, req.query);
+@Route('/inspectors')
+export class InspectorsController extends Controller {
+    @Get('/{id}')
+    public async getInspectorById(id: string): Promise<IInspectorModel | void> {
+        try {
+            const inspector = await InspectorsModel.findById(id).where('deleted', false);
+            if (!inspector) {
+                this.setStatus(statusCodes.NOT_FOUND);
+            } else {
+                return inspector;
+            }
+        } catch (error) {
+            this.setStatus(statusCodes.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    res.send(result.length ? result[0] : new NotFoundError('No nearby inspectors were found'));
+    @Get()
+    public async getAllInspectors(): Promise<IInspectorModel[]> {
+        return await InspectorsModel.find({}).where('deleted', false);
+    }
+
+    @SuccessResponse('201', 'Created')
+    @Post()
+    public async addNewInspector(@BodyProp() inspectorData: IInspectorModel): Promise<IInspectorModel> {
+        const newInspector = new InspectorsModel(inspectorData);
+        const saveResult = await newInspector.save();
+        this.setStatus(201);
+        return saveResult.toJSON();
+    }
+
+    @Patch('/{id}')
+    public async updateInspector(id: string, @BodyProp() inspectorData: IInspectorModel): Promise<IInspectorModel | null> {
+        // TODO: validation should be here
+        return await InspectorsModel.findOneAndUpdate({'_id': id}, inspectorData, {new: true});
+    }
+
+    @Put('/{id}')
+    public async replaceInspector(id: string, @BodyProp() inspectorData: IInspectorModel): Promise<IInspectorModel | null> {
+        // TODO: validation should be here
+        return await InspectorsModel.replaceOne({'_id': id}, inspectorData);
+    }
+
+    @Delete('/{id}')
+    public async deleteInspector(id: string): Promise<void> {
+        await InspectorsModel.findOneAndUpdate({'_id': id}, {deleted: true});
+        this.setStatus(statusCodes.NO_CONTENT);
+    }
+
+    @Get('/nearest')
+    public async getNearest(@Query() lat: number, @Query() lon: number): Promise<IInspectorModel> {
+        const inspectors = await InspectorsModel.find({}).where('deleted', false);
+        if (!inspectors.length) throw new NotFoundError('No inspectors were found');
+        if (!lat || !lon) throw new BadRequestError('Destination coordinates must be specified');
+
+        let result: any;
+        if (process.env.CALC_DISTANCE_WITH_GOOGLE_API === 'TRUE') {
+            result = await findNearestViaGoogleAPI(inspectors, {lat, lon});
+        } else {
+            result = findNearestViaMath(inspectors, {lat, lon});
+        }
+
+        return result.length ? result[0] : new NotFoundError('No nearby inspectors were found');
+    }
 }
 
-async function findNearestViaGoogleAPI(inspectors: Array<InspectorModel>, bastard: any) {
+async function findNearestViaGoogleAPI(inspectors: Array<IInspectorModel>, bastard: any) {
     console.log('Finding nearest via Google Maps API');
     const origins = inspectors.map(({location}) => `${location.lat}, ${location.lon}`);
     const destinations = `${bastard.lat}, ${bastard.lon}`;
@@ -75,16 +88,19 @@ async function findNearestViaGoogleAPI(inspectors: Array<InspectorModel>, bastar
             const element = result.json.rows[index].elements[0];
             const distance = element.status === 'OK' ? element.distance.value : null;
             const duration = element.status === 'OK' ? element.duration.value : null;
-            return {...inspector.toJSON(), distance, duration};
+            return {...inspector, distance, duration};
         })
         .filter((inspector) => inspector.distance && (inspector.duration < MAX_INSPECTOR_WALK_DURATION || inspector.distance < MAX_INSPECTOR_WALK_DISTANCE))
         .sort((a, b) => a.distance - b.distance);
 }
 
-function findNearestViaMath(inspectors: Array<InspectorModel>, bastard: any) {
+function findNearestViaMath(inspectors: Array<IInspectorModel>, bastard: any) {
     console.log('Finding nearest via math');
     return inspectors.map(inspector => {
-        return {...inspector.toJSON(), distance: getDistanceFromLatLon(inspector.location.lat, inspector.location.lon, bastard.lat, bastard.lon)}
+        return {
+            ...inspector,
+            distance: getDistanceFromLatLon(inspector.location.lat, inspector.location.lon, bastard.lat, bastard.lon)
+        }
     }).sort((a, b) => a.distance - b.distance);
 }
 
