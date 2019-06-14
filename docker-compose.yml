@@ -249,7 +249,7 @@ services:
     networks:
       - public-network
       - private-network
-      - admin-api-gateway-redis-host
+      - admin-api-gateway-network
     environment:
       REDIS_HOST: admin-api-gateway-redis-host
       INSPECTOR_BASE_PATH: http://inspector-service-host:3000
