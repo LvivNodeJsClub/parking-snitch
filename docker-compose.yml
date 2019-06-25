@@ -239,7 +239,7 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
 
   admin-api-gateway-host:
-    image: admin-api-gateway:${REPORT_SERVICE_VERSION}
+    image: admin-api-gateway:${ADMIN_APIGATEWAY_SERVICE_VERSION}
     restart: on-failure
     links:
       - notification-service-host
