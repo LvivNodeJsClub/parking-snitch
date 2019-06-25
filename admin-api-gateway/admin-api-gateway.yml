@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-api-gateway
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    type: admin-api-gateway
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: admin-api-gateway
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: admin-api-gateway
+        type: webserver
+    spec:
+      containers:
+        - name: admin-api-gateway
+          image: parkingsnitch/admin-api-gateway:1.0
+          env:
+            - name: REDIS_HOST
+              value: admin-api-gateway-redis
+            - name: INSPECTOR_BASE_PATH
+              value: http://inspector-service-host:3000
+            - name: NOTIFICATION_BASE_PATH
+              value: http://notification-service-host:3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-api-gateway-redis
+spec:
+  ports:
+    - port: 6379
+      targetPort: 6379
+      protocol: TCP
+  selector:
+    type: admin-api-gateway-redis
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: admin-api-gateway-redis
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: admin-api-gateway-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:5.0.4
