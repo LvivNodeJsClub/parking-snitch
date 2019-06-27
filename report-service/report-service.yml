@@ -1,0 +1,89 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: report-service
+spec:
+  ports:
+  - port: 3000
+    targetPort: 3000
+  selector:
+    type: report-service
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: report-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: report-service
+    spec:
+      containers:
+      - name: inspector-service
+        image: parkingsnitch/report-service:1.0
+        env:
+        - name: QUEUE_HOST
+          value: photo-queue
+        - name: IMAGES_QUEUE_NAME
+          value: images-queue
+        - name: REPORT_QUEUE_HOST
+          value: reports-queue
+        - name: DB_HOST
+          value: report-service-mongodb
+        - name: DB_NAME
+          value: inspector-service-dbname
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: report-service-mongodata
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: report-service-mongodb
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+  selector:
+    service: report-service-mongodb
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: report-service-mongodb
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: report-service-mongodb
+    spec:
+      containers:
+      - image: mongo
+        name: report-service-mongodb
+        ports:
+        - containerPort: 27017
+        resources: {}
+        volumeMounts:
+        - mountPath: /data/db
+          name: report-service-mongodata
+      restartPolicy: Always
+      volumes:
+      - name: report-service-mongodata
+        persistentVolumeClaim:
+          claimName: report-service-mongodata

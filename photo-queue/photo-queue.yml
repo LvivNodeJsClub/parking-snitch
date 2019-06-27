@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: photo-queue
+spec:
+  ports:
+  - name: "5672"
+    port: 5672
+    targetPort: 5672
+  selector:
+    service: photo-queue
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: photo-queue
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: photo-queue
+    spec:
+      containers:
+      - image: rabbitmq:3-management
+        name: photo-queue
+        ports:
+        - containerPort: 5672
+        env:
+        - name: RABBITMQ_ERLANG_COOKIE
+          value: SWQOKODSQALRPCLNMEQG
+        - name: RABBITMQ_DEFAULT_VHOST
+          value: /
+      restartPolicy: Always
