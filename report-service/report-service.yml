@@ -26,11 +26,11 @@ spec:
         image: parkingsnitch/report-service:1.0
         env:
         - name: QUEUE_HOST
-          value: photo-queue
+          value: photo-service-queue
         - name: IMAGES_QUEUE_NAME
           value: images-queue
         - name: REPORT_QUEUE_HOST
-          value: reports-queue
+          value: report-service-queue
         - name: DB_HOST
           value: report-service-mongodb
         - name: DB_NAME
