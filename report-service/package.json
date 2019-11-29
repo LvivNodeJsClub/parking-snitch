@@ -9,7 +9,8 @@
     "start": "node dist/index.js",
     "build": "tsc -p .",
     "build:live": "nodemon --require dotenv/config --watch \"**/*.ts\" --exec \"ts-node\" index.ts",
-    "test": "jest --config=./jest.config.js"
+    "test": "jest --config=./jest.config.js",
+    "sonar-scanner": "node_modules/sonar-scanner/bin/sonar-scanner"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +29,7 @@
     "dotenv": "^6.1.0",
     "jest": "^24.6.0",
     "nodemon": "^1.18.5",
+    "sonar-scanner": "^3.1.0",
     "supertest": "^4.0.2",
     "ts-jest": "^24.0.1",
     "ts-node": "^7.0.1",

@@ -4,6 +4,11 @@ pipeline {
     
     agent any
 
+    environment {
+        SONAR_HOST_URL = credentials("sonar-host-url")
+        SONAR_LOGIN = credentials("sonar-login")
+    }
+
     stages {
 
         stage('Init environment variables.') {
@@ -146,7 +151,7 @@ pipeline {
             steps {
                 echo 'Publish artifacts for report-processing-service'
                 script {
-                    dir ('report-service') {
+                    dir ('report-processing-service') {
                         sh 'docker push'
                     }
                 }
@@ -305,7 +310,13 @@ pipeline {
                 }
             }
         }
-
+        stage('Sonarqube for report-service') {
+          steps {
+            script {
+              sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.report-service -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
+            }
+          }
+        }
         /*
          * Build `photo-service`
          */
