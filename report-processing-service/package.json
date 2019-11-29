@@ -13,7 +13,8 @@
     "tsc": "tsc -p .",
     "build": "npm run generate && npm run tsc",
     "test": "jest --config=./test.config.json",
-    "spec": "jest --config=./spec.config.json"
+    "spec": "jest --config=./spec.config.json",
+    "sonar-scanner": "node_modules/sonar-scanner/bin/sonar-scanner"
   },
   "keywords": [],
   "author": "",

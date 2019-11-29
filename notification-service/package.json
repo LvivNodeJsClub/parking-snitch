@@ -9,7 +9,8 @@
     "build": "npm run build:ts",
     "build:ts": "npx tsc",
     "start": "node dist/index.js",
-    "test": "mocha -r ts-node/register test/**/*.ts"
+    "test": "mocha -r ts-node/register test/**/*.ts",
+    "sonar-scanner": "node_modules/sonar-scanner/bin/sonar-scanner"
   },
   "author": "",
   "license": "ISC",

@@ -11,7 +11,8 @@
     "build:ts": "npx tsc",
     "watch:ts": "npx tsc -w",
     "build": "npm run build:ts",
-    "test": "jest"
+    "test": "jest",
+    "sonar-scanner": "node_modules/sonar-scanner/bin/sonar-scanner"
   },
   "keywords": [
     "photo",

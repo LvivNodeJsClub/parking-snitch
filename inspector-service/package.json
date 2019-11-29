@@ -30,7 +30,8 @@
     "build": "tsc -p .",
     "build:live": "nodemon --require dotenv/config --watch \"**/*.ts\" --exec \"ts-node\" index.ts",
     "test": "jest --config=./test.config.json",
-    "spec": "jest --config=./spec.config.json"
+    "spec": "jest --config=./spec.config.json",
+    "sonar-scanner": "node_modules/sonar-scanner/bin/sonar-scanner"
   },
   "author": "",
   "license": "ISC"
