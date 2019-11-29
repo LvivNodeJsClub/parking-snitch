@@ -16,7 +16,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${REPORT_PROCESSING_SERVICE_DB_PASS}
 
   report-processing-service-host:
-    image: report-processing-service:${REPORT_PROCESSING_SERVICE_VERSION}
+    image: parkingsnitch/report-processing-service:${REPORT_PROCESSING_SERVICE_VERSION}
     restart: on-failure
     links:
       - report-processing-db-host
@@ -60,7 +60,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${NOTIFICSTION_SERVICE_DB_PASS}
 
   notification-service-host:
-    image: notification-service:${NOTIFICSTION_SERVICE_VERSION}
+    image: parkingsnitch/notification-service:${NOTIFICSTION_SERVICE_VERSION}
     build:
       context: ./notification-service
       dockerfile: Dockerfile
@@ -99,7 +99,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${INSPECTOR_SERVICE_DB_PASS}
 
   inspector-service-host:
-    image: inspector-service:${INSPECTOR_SERVICE_VERSION}
+    image: parkingsnitch/inspector-service:${INSPECTOR_SERVICE_VERSION}
     restart: on-failure
     links:
       - inspector-db-host
@@ -143,7 +143,7 @@ services:
       - report-service-network
 
   photo-service-host:
-    image: photo-service:${PHOTO_SERVICE_VERSION}
+    image: parkingsnitch/photo-service:${PHOTO_SERVICE_VERSION}
     restart: on-failure
     links:
       - photo-db-host
@@ -199,7 +199,7 @@ services:
       - report-processing-service-network
 
   report-service-host:
-    image: report-service:${REPORT_SERVICE_VERSION}
+    image: parkingsnitch/report-service:${REPORT_SERVICE_VERSION}
     restart: on-failure
     links:
       - report-db-host
@@ -239,7 +239,7 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
 
   admin-api-gateway-host:
-    image: admin-api-gateway:${ADMIN_APIGATEWAY_SERVICE_VERSION}
+    image: parkingsnitch/admin-api-gateway:${ADMIN_APIGATEWAY_SERVICE_VERSION}
     restart: on-failure
     links:
       - notification-service-host
