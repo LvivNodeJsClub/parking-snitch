@@ -9,6 +9,10 @@ pipeline {
         SONAR_LOGIN = credentials("sonar-login")
     }
 
+    tools {
+        jdk 'java-13-oracle' 
+    }
+
     stages {
 
         stage('Init environment variables.') {
