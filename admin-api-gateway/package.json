@@ -10,7 +10,7 @@
     "sonar-scanner": "node_modules/sonar-scanner/bin/sonar-scanner"
   },
   "dependencies": {
-    "express-gateway": "^1.16.3",
+    "express-gateway": "^1.16.9",
     "express-gateway-plugin-admin": "file:./express-gateway-plugin-admin"
   },
   "devDependencies": {
