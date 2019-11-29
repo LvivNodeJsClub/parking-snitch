@@ -157,7 +157,16 @@ pipeline {
                 }
             }
         }
-
+        stage('Sonarqube for report-processing-service') {
+            steps {
+                echo 'Sonarqube for report-processing-service'
+                script {
+                    dir ('report-processing-service') {
+                        sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.report-processing-service -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
+                    }
+                }
+            }
+        }
         /*
          * Build `report-service`
          */
@@ -311,11 +320,14 @@ pipeline {
             }
         }
         stage('Sonarqube for report-service') {
-          steps {
-            script {
-              sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.report-service -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
+            steps {
+                echo 'Sonarqube for report-service'
+                script {
+                    dir ('report-service') {
+                        sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.report-service -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
+                    }
+                }
             }
-          }
         }
         /*
          * Build `photo-service`
@@ -464,7 +476,16 @@ pipeline {
                 }
             }
         }
-
+        stage('Sonarqube for photo-service') {
+            steps {
+                echo 'Sonarqube for photo-service'
+                script {
+                    dir ('photo-service') {
+                        sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.photo-service -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
+                    }
+                }
+            }
+        }
         /*
          * Build `notification-service`
          */
@@ -617,7 +638,16 @@ pipeline {
                 }
             }
         }
-
+        stage('Sonarqube for notification-service') {
+            steps {
+                echo 'Sonarqube for notification-service'
+                script {
+                    dir ('notification-service') {
+                        sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.notification-service -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
+                    }
+                }
+            }
+        }
         /*
          * Build `inspector-service`
          */
@@ -760,7 +790,16 @@ pipeline {
                 }
             }
         }
-
+        stage('Sonarqube for inspector-service') {
+            steps {
+                echo 'Sonarqube for inspector-service'
+                script {
+                    dir ('inspector-service') {
+                        sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.inspector-service -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
+                    }
+                }
+            }
+        }
         /*
          * Build `admin-api-gateway`
          */
@@ -914,6 +953,16 @@ pipeline {
                 script {
                     dir ('admin-api-gateway') {
                         sh 'docker push'
+                    }
+                }
+            }
+        }
+                stage('Sonarqube for admin-api-gateway') {
+            steps {
+                echo 'Sonarqube for admin-api-gateway'
+                script {
+                    dir ('admin-api-gateway') {
+                        sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.admin-api-gateway -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
                     }
                 }
             }
