@@ -13,6 +13,6 @@
     }]
   ],
   "collectCoverage": true,
-  "coverageReporters": ["json", "html"],
+  "coverageReporters": ["json", "lcov", "html"],
   "coverageDirectory": "./test-coverage"
 }
