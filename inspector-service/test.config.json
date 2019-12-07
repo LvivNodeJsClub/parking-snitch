@@ -5,14 +5,14 @@
   "testMatch": ["**\/*.test.js"],
   "reporters": [
     "default",
-    [ "jest-junit", { 
-      "outputDirectory": "./test-report" 
-    } ],
+    [ "jest-junit", {
+      "outputDirectory": "./test-report"} ],
     ["jest-html-reporter", {
       "outputPath": "test-report/index.html"
     }]
   ],
   "collectCoverage": true,
-  "coverageReporters": ["json", "lcov", "html"],
-  "coverageDirectory": "./test-coverage"
+  "coverageReporters": ["lcov"],
+  "coverageDirectory": "./test-coverage",
+  "testResultsProcessor": "jest-sonar-reporter"
 }

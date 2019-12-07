@@ -730,7 +730,7 @@ pipeline {
                         allowMissing: false,
                         alwaysLinkToLastBuild: false,
                         keepAll: true,
-                        reportDir: 'inspector-service/test-coverage',
+                        reportDir: 'inspector-service/test-coverage/lcov-report',
                         reportFiles: 'index.html',
                         reportName: 'Inspector Test Coverage Report'
                   ]
