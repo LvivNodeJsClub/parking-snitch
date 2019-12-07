@@ -799,7 +799,7 @@ pipeline {
                 echo 'Sonarqube for inspector-service'
                 script {
                     dir ('inspector-service') {
-                        sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.inspector-service -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
+                        sh "npm run sonar-scanner -- -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
                     }
                 }
             }
