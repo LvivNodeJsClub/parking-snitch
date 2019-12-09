@@ -6,7 +6,7 @@ import {validateUpdateReport, validateCreateNewReport} from "../validators/repor
 
 
 export const getReportById = async (ctx: Context) => {
-    const report = await ReportModel.findById(ctx.params.id);
+    const report = await ReportModel.findById(ctx.params.id).exec();
     if (!report) {
         throw new NotFoundError(`Report with ID ${ctx.params.id} was not found`);
     }
@@ -34,10 +34,10 @@ export const modifyReport = async (ctx: Context) => {
     }
 
     const query = validateUpdateReport(ctx.request.body);
-    ctx.body = await ReportModel.findOneAndUpdate({'_id': ctx.params.id}, query, {new: true});
+    ctx.body = await ReportModel.findOneAndUpdate({'_id': ctx.params.id}, query, {new: true}).exec();
 };
 
 export const deleteReport = async (ctx: Context) => {
-    await ReportModel.findOneAndUpdate({'_id': ctx.params.id}, {status: Statuses.CANCELED});
+    await ReportModel.findOneAndUpdate({'_id': ctx.params.id}, {status: Statuses.CANCELED}).exec();
     ctx.response.status = HttpStatus.NO_CONTENT;
 };

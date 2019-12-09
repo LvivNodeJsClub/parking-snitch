@@ -33,4 +33,4 @@ export default class RabbitmqConsumer implements IQueueConsumer {
             this.channel && this.channel.ack(message as Message);
         }, {noAck: false});
     }
-};
+}
