@@ -9,14 +9,14 @@ describe('App', () => {
     let server: Server;
 
     beforeAll(async function (done) {
-        server = await app.listen(PORT, () => {
+        server = app.listen(PORT, () => {
             console.log(`Listening port ${PORT}`);
             done();
         });
     });
 
     afterAll(async function () {
-        await server.close();
+        server.close();
     });
 
     describe('/healthcheck', () => {

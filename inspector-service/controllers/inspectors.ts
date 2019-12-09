@@ -8,7 +8,7 @@ import {MAX_INSPECTOR_WALK_DURATION, MAX_INSPECTOR_WALK_DISTANCE} from '../const
 const googleMapsAPIClient = require('@google/maps').createClient({key: process.env.GOOGLE_API_KEY, Promise});
 
 export async function getInspectorById(req: Request, res: Response) {
-    const inspector = await InspectorsModel.findById(req.params.id).where('deleted', false);
+    const inspector = await InspectorsModel.findById(req.params.id).where('deleted', false).exec();
     if (!inspector) {
         throw new NotFoundError(`Report with ID ${req.params.id} was not found`);
     }
@@ -16,7 +16,7 @@ export async function getInspectorById(req: Request, res: Response) {
 }
 
 export async function getAllInspectors(req: Request, res: Response) {
-    res.send(await InspectorsModel.find({}).where('deleted', false));
+    res.send(await InspectorsModel.find({}).where('deleted', false).exec());
 }
 
 export async function addNewInspector(req: Request, res: Response) {
@@ -31,22 +31,22 @@ export async function addNewInspector(req: Request, res: Response) {
 export async function updateInspector(req: Request, res: Response) {
     const inspectorData = req.body;
     // TODO: validation should be here
-    res.send(await InspectorsModel.findOneAndUpdate({'_id': req.params.id}, inspectorData, {new: true}));
+    res.send(await InspectorsModel.findOneAndUpdate({'_id': req.params.id}, inspectorData, {new: true}).exec());
 }
 
 export async function replaceInspector(req: Request, res: Response) {
     const inspectorData = req.body;
     // TODO: validation should be here
-    res.send(await InspectorsModel.replaceOne({'_id': req.params.id}, inspectorData));
+    res.send(await InspectorsModel.replaceOne({'_id': req.params.id}, inspectorData).exec());
 }
 
 export async function deleteInspector(req: Request, res: Response) {
-    await InspectorsModel.findOneAndUpdate({'_id': req.params.id}, {deleted: true});
+    await InspectorsModel.findOneAndUpdate({'_id': req.params.id}, {deleted: true}).exec();
     res.sendStatus(statusCodes.NO_CONTENT);
 }
 
 export async function getNearest(req: Request, res: Response) {
-    const inspectors = await InspectorsModel.find({}).where('deleted', false);
+    const inspectors = await InspectorsModel.find({}).where('deleted', false).exec();
     if (!inspectors.length) throw new NotFoundError('No inspectors were found');
     if (!req.query.lat || !req.query.lon) throw new BadRequestError('Destination coordinates must be specified');
 
