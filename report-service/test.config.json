@@ -1,13 +1,12 @@
 {
-  "name": "report-processing-service",
+  "name": "inspector-service",
   "roots": ["<rootDir>/tests", "<rootDir>/dist"],
   "modulePaths": ["<rootDir>/dist"],
   "testMatch": ["**\/*.test.js"],
   "reporters": [
     "default",
-    [ "jest-junit", { 
-      "outputDirectory": "./test-report" 
-    } ],
+    [ "jest-junit", {
+      "outputDirectory": "./test-report"} ],
     ["jest-html-reporter", {
       "outputPath": "test-report/index.html"
     }]

@@ -97,7 +97,7 @@ pipeline {
                         allowMissing: false,
                         alwaysLinkToLastBuild: false,
                         keepAll: true,
-                        reportDir: 'report-processing-service/test-coverage',
+                        reportDir: 'report-processing-service/test-coverage/lcov-report',
                         reportFiles: 'index.html',
                         reportName: 'Report Processing Test Coverage Report'
                   ]
@@ -166,7 +166,7 @@ pipeline {
                 echo 'Sonarqube for report-processing-service'
                 script {
                     dir ('report-processing-service') {
-                        sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.report-processing-service -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
+                        sh "npm run sonar-scanner -- -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
                     }
                 }
             }
@@ -225,11 +225,6 @@ pipeline {
             }
         }
         stage('Testing report-service') {
-            when {
-                expression {
-                    return false
-                }
-            }
             steps {
                 echo 'Testing report-service'
                 script {
@@ -254,7 +249,7 @@ pipeline {
                         allowMissing: false,
                         alwaysLinkToLastBuild: false,
                         keepAll: true,
-                        reportDir: 'report-service/test-coverage',
+                        reportDir: 'report-service/test-coverage/lcov-report',
                         reportFiles: 'index.html',
                         reportName: 'Report Test Coverage Report'
                   ]
@@ -328,7 +323,7 @@ pipeline {
                 echo 'Sonarqube for report-service'
                 script {
                     dir ('report-service') {
-                        sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.report-service -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
+                        sh "npm run sonar-scanner -- -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
                     }
                 }
             }
@@ -395,28 +390,28 @@ pipeline {
                     }
                 }
             }
-            // post {
-            //     always {
-            //         echo 'Save report'
-            //         junit 'photo-service/test-report/**/*.xml'
-            //         publishHTML target: [
-            //             allowMissing: false,
-            //             alwaysLinkToLastBuild: false,
-            //             keepAll: true,
-            //             reportDir: 'photo-service/test-report',
-            //             reportFiles: 'index.html',
-            //             reportName: 'Photo Test Report'
-            //         ]
-            //         publishHTML target: [
-            //             allowMissing: false,
-            //             alwaysLinkToLastBuild: false,
-            //             keepAll: true,
-            //             reportDir: 'photo-service/test-coverage',
-            //             reportFiles: 'index.html',
-            //             reportName: 'Photo Test Coverage Report'
-            //       ]
-            //     }
-            // }
+            post {
+                always {
+                    echo 'Save report'
+                    junit 'photo-service/test-report/**/*.xml'
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'photo-service/test-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Photo Test Report'
+                    ]
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'photo-service/test-coverage/lcov-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Photo Test Coverage Report'
+                  ]
+                }
+            }
         }
         stage('Spec photo-service') {
             when {
@@ -485,7 +480,7 @@ pipeline {
                 echo 'Sonarqube for photo-service'
                 script {
                     dir ('photo-service') {
-                        sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.photo-service -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
+                        sh "npm run sonar-scanner -- -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
                     }
                 }
             }
@@ -573,7 +568,7 @@ pipeline {
                         allowMissing: false,
                         alwaysLinkToLastBuild: false,
                         keepAll: true,
-                        reportDir: 'notification-service/test-coverage',
+                        reportDir: 'notification-service/test-coverage/lcov-report',
                         reportFiles: 'index.html',
                         reportName: 'Notification Test Coverage Report'
                   ]
@@ -647,7 +642,7 @@ pipeline {
                 echo 'Sonarqube for notification-service'
                 script {
                     dir ('notification-service') {
-                        sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.notification-service -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
+                        sh "npm run sonar-scanner -- -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
                     }
                 }
             }
@@ -892,7 +887,7 @@ pipeline {
                         allowMissing: false,
                         alwaysLinkToLastBuild: false,
                         keepAll: true,
-                        reportDir: 'admin-api-gateway/test-coverage',
+                        reportDir: 'admin-api-gateway/test-coverage/lcov-report',
                         reportFiles: 'index.html',
                         reportName: 'Api gateway Test Coverage Report'
                   ]
@@ -961,12 +956,12 @@ pipeline {
                 }
             }
         }
-                stage('Sonarqube for admin-api-gateway') {
+        stage('Sonarqube for admin-api-gateway') {
             steps {
                 echo 'Sonarqube for admin-api-gateway'
                 script {
                     dir ('admin-api-gateway') {
-                        sh "npm run sonar-scanner -- -Dsonar.projectKey=parking-snitch.admin-api-gateway -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
+                        sh "npm run sonar-scanner -- -Dsonar.host.url=${env.SONAR_HOST_URL}  -Dsonar.login=${env.SONAR_LOGIN}"
                     }
                 }
             }

@@ -1,3 +1,7 @@
 *.js
 .env
 dist
+test-report
+test-coverage
+spec-report
+spec-coverage
