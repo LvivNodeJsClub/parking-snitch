@@ -6,4 +6,7 @@ dist
 storage/*
 !storage/.gitkeep
 *.log
-coverage/
+test-report
+test-coverage
+spec-report
+spec-coverage

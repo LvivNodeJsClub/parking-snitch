@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="/Users/ihor/Workspace/parking-snitch/photo-service/tests/controllers/healthcheckController.test.ts">
+    <testCase name="healthCheckController should return 200 OK" duration="4"/>
+  </file>
+</testExecutions>
